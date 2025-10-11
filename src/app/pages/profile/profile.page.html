@@ -92,22 +92,4 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card class="stats-card" *ngIf="userData">
-        <ion-card-header>
-          <ion-card-title>{{ 'PROFILE.STATISTICS' | translate }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="stats-grid">
-            <div class="stat-item">
-              <ion-icon name="images" color="primary"></ion-icon>
-              <div class="stat-info">
-                <h3>{{ userData.wallpapers?.length || 0 }}</h3>
-                <p>{{ 'PROFILE.WALLPAPERS' | translate }}</p>
-              </div>
-            </div>
-          </div>
-        </ion-card-content>
-      </ion-card>
-    </div>
-  </div>
-</ion-content>
+      

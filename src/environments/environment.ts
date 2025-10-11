@@ -16,8 +16,8 @@ export const environment = {
   measurementId: "G-X174C7NHXZ"
   },
    SUPABASE: {
-    URL: 'https://xtrdsirxtbdcuficrgkj.supabase.co',
-    API_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0cmRzaXJ4dGJkY3VmaWNyZ2tqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAxMzI0OTgsImV4cCI6MjA3NTcwODQ5OH0.5itVXKMM4sHnn4p9f8XQDvJQ0NUN41W7uvKYE-JvVZc' 
+    URL: 'https://xsrwhnvlpvfyihpxlzhs.supabase.co',
+    API_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzcndobnZscHZmeWlocHhsemhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0Mzk2NzUsImV4cCI6MjA3NDAxNTY3NX0.xJ_l_CH364rejesnvfSWF7-DDbQMiXXeHxwQnCfhkzg' 
   }
 };
 

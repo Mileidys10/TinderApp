@@ -13,7 +13,7 @@ export const environment = {
   },
    SUPABASE: {
     URL: 'https://xsrwhnvlpvfyihpxlzhs.supabase.co',
-    API_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzcndobnZscHZmeWlocHhsemhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0Mzk2NzUsImV4cCI6MjA3NDAxNTY3NX0.xJ_l_CH364rejesnvfSWF7-DDbQMiXXeHxwQnCfhkzg' // tu anon public key
+    API_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzcndobnZscHZmeWlocHhsemhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0Mzk2NzUsImV4cCI6MjA3NDAxNTY3NX0.xJ_l_CH364rejesnvfSWF7-DDbQMiXXeHxwQnCfhkzg' 
   }
 
 };
