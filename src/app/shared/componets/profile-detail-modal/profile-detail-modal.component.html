@@ -1,0 +1,86 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="transparent">
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" fill="clear">
+        <ion-icon name="close-circle" size="large" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="profile-detail-content">
+  <div class="profile-detail-container">
+    <div class="photo-gallery">
+      <swiper-container 
+        #photoSlider
+        [pagination]="true"
+        [navigation]="false"
+        (slidechange)="onSlideChange($event)">
+        <swiper-slide *ngFor="let photo of profile.photos; let i = index">
+          <img [src]="photo" [alt]="profile.name + ' photo ' + (i + 1)">
+        </swiper-slide>
+      </swiper-container>
+
+      <div class="photo-counter">
+        <ion-chip color="dark">
+          {{ currentPhotoIndex + 1 }} / {{ profile.photos?.length || 0 }}
+        </ion-chip>
+      </div>
+
+      <div class="photo-nav">
+        <ion-button 
+          *ngIf="currentPhotoIndex > 0"
+          fill="clear" 
+          class="nav-arrow left"
+          (click)="prevPhoto()">
+          <ion-icon name="chevron-back" size="large"></ion-icon>
+        </ion-button>
+        
+        <ion-button 
+          *ngIf="currentPhotoIndex < (profile.photos?.length || 0) - 1"
+          fill="clear" 
+          class="nav-arrow right"
+          (click)="nextPhoto()">
+          <ion-icon name="chevron-forward" size="large"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <div class="profile-info-section">
+      <div class="name-age">
+        <h1>{{ profile.name }}, {{ calculateAge(profile.birthDate) }}</h1>
+      </div>
+
+      <div class="location" *ngIf="profile.city">
+        <ion-icon name="location"></ion-icon>
+        <span>{{ profile.city }}, {{ profile.country }}</span>
+      </div>
+
+      <div class="gender-info" *ngIf="profile.showGenderProfile">
+        <ion-chip color="medium">
+          <ion-icon 
+            [name]="profile.gender === 'male' ? 'male' : profile.gender === 'female' ? 'female' : 'male-female'">
+          </ion-icon>
+          <ion-label>{{ profile.gender }}</ion-label>
+        </ion-chip>
+      </div>
+
+      <div class="bio-section" *ngIf="profile.bio">
+        <h3>About</h3>
+        <p>{{ profile.bio }}</p>
+      </div>
+
+      <div class="passions-section" *ngIf="profile.passions && profile.passions.length > 0">
+        <h3>Interests</h3>
+        <div class="passions-grid">
+          <ion-chip 
+            *ngFor="let passion of profile.passions" 
+            color="danger"
+            class="passion-chip">
+            {{ passion.category }}
+          </ion-chip>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

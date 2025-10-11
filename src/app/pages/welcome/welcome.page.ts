@@ -9,6 +9,7 @@ import { Auth } from 'src/app/provide/auth/auth';
   standalone: false,
 })
 export class WelcomePage implements OnInit {
+  private hasNavigated = false;
 
   constructor(private router: Router, private authSrv: Auth) {}
 
@@ -20,20 +21,20 @@ export class WelcomePage implements OnInit {
       return;
     }
     
-    const hasSeenWelcome = localStorage.getItem('hasSeenWelcome');
-    
-    if (hasSeenWelcome) {
-      this.router.navigate(['/login']);
-    }
+
   }
 
   goToRegister() {
-    localStorage.setItem('hasSeenWelcome', 'true');
-    this.router.navigate(['/register']);
+    if (!this.hasNavigated) {
+      this.hasNavigated = true;
+      this.router.navigate(['/register']);
+    }
   }
 
   goToLogin() {
-    localStorage.setItem('hasSeenWelcome', 'true');
-    this.router.navigate(['/login']);
+    if (!this.hasNavigated) {
+      this.hasNavigated = true;
+      this.router.navigate(['/login']);
+    }
   }
 }

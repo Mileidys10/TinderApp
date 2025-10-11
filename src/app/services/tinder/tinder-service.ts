@@ -26,58 +26,59 @@ export class TinderService {
     private authSrv: Auth
   ) {}
 
-  //  MATCHING 
+  // ================== MATCHING ==================
   
   async getAvailableProfiles(): Promise<IPublicProfile[]> {
-  try {
-    const currentUid = this.authSrv.getCurrentUserUid();
-    if (!currentUid) return [];
+    try {
+      const currentUid = this.authSrv.getCurrentUserUid();
+      if (!currentUid) return [];
 
-    const likedUsers = await this.getLikedUserIds(currentUid);
-    
-    const currentUserDoc = await getDoc(doc(this.firestore, 'users', currentUid));
-    const currentUser = currentUserDoc.data() as IPublicProfile;
-    
-    const usersRef = collection(this.firestore, 'users');
-    
-    const q = query(usersRef, limit(50)); 
-    
-    const snapshot = await getDocs(q);
-    const profiles: IPublicProfile[] = [];
-
-    snapshot.forEach(doc => {
-      const data = doc.data() as IPublicProfile;
+      // Get users that current user has already liked or passed
+      const interactedUsers = await this.getInteractedUserIds(currentUid);
       
-      if (data.uid !== currentUid && 
-          !likedUsers.includes(data.uid) &&
-          data.photos && 
-          data.photos.length > 0) { 
-        profiles.push(data);
-      }
-    });
+      const usersRef = collection(this.firestore, 'users');
+      const q = query(usersRef, limit(50)); 
+      
+      const snapshot = await getDocs(q);
+      const profiles: IPublicProfile[] = [];
 
-    return this.shuffleArray(profiles);
-  } catch (error) {
-    console.error('Error getting profiles:', error);
-    return [];
+      snapshot.forEach(doc => {
+        const data = doc.data() as IPublicProfile;
+        
+        // Only show profiles that:
+        // 1. Are not the current user
+        // 2. Haven't been liked or passed yet
+        // 3. Have at least one photo
+        if (data.uid !== currentUid && 
+            !interactedUsers.includes(data.uid) &&
+            data.photos && 
+            data.photos.length > 0) { 
+          profiles.push(data);
+        }
+      });
+
+      return this.shuffleArray(profiles);
+    } catch (error) {
+      console.error('Error getting profiles:', error);
+      return [];
+    }
   }
-}
 
-private shuffleArray<T>(array: T[]): T[] {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  private shuffleArray<T>(array: T[]): T[] {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
   }
-  return shuffled;
-}
 
-  
   async likeProfile(likedUserId: string): Promise<boolean> {
     try {
       const currentUid = this.authSrv.getCurrentUserUid();
       if (!currentUid) return false;
 
+      // Save the like
       const likesRef = collection(this.firestore, 'likes');
       await addDoc(likesRef, {
         from: currentUid,
@@ -85,6 +86,7 @@ private shuffleArray<T>(array: T[]): T[] {
         timestamp: Date.now()
       });
 
+      // Check if it's a mutual match
       const hasMatch = await this.checkMutualLike(currentUid, likedUserId);
       
       if (hasMatch) {
@@ -98,7 +100,6 @@ private shuffleArray<T>(array: T[]): T[] {
       return false;
     }
   }
-
 
   async passProfile(passedUserId: string): Promise<void> {
     try {
@@ -116,7 +117,6 @@ private shuffleArray<T>(array: T[]): T[] {
     }
   }
 
- 
   private async checkMutualLike(userId: string, likedUserId: string): Promise<boolean> {
     try {
       const likesRef = collection(this.firestore, 'likes');
@@ -134,7 +134,6 @@ private shuffleArray<T>(array: T[]): T[] {
     }
   }
 
-  
   private async createMatch(userId1: string, userId2: string): Promise<void> {
     try {
       const matchesRef = collection(this.firestore, 'matches');
@@ -159,16 +158,18 @@ private shuffleArray<T>(array: T[]): T[] {
     }
   }
 
- 
-  private async getLikedUserIds(userId: string): Promise<string[]> {
+  // Get all user IDs that current user has interacted with (liked or passed)
+  private async getInteractedUserIds(userId: string): Promise<string[]> {
     try {
       const ids: string[] = [];
       
+      // Get liked users
       const likesRef = collection(this.firestore, 'likes');
       const likesQuery = query(likesRef, where('from', '==', userId));
       const likesSnapshot = await getDocs(likesQuery);
       likesSnapshot.forEach(doc => ids.push(doc.data()['to']));
 
+      // Get passed users
       const passesRef = collection(this.firestore, 'passes');
       const passesQuery = query(passesRef, where('from', '==', userId));
       const passesSnapshot = await getDocs(passesQuery);
@@ -176,14 +177,13 @@ private shuffleArray<T>(array: T[]): T[] {
 
       return ids;
     } catch (error) {
-      console.error('Error getting liked users:', error);
+      console.error('Error getting interacted users:', error);
       return [];
     }
   }
 
-  //  CHAT 
+  // ================== MATCHES & CHAT ==================
 
- 
   async getMatches(): Promise<IMatch[]> {
     try {
       const currentUid = this.authSrv.getCurrentUserUid();
@@ -212,6 +212,32 @@ private shuffleArray<T>(array: T[]): T[] {
     }
   }
 
+  // Real-time subscription to matches
+  subscribeToMatches(callback: (matches: IMatch[]) => void) {
+    const currentUid = this.authSrv.getCurrentUserUid();
+    if (!currentUid) {
+      callback([]);
+      return () => {};
+    }
+
+    const matchesRef = collection(this.firestore, 'matches');
+    const q = query(
+      matchesRef,
+      where('participants', 'array-contains', currentUid)
+    );
+
+    return onSnapshot(q, (snapshot) => {
+      const matches: IMatch[] = [];
+      snapshot.forEach(doc => {
+        matches.push({
+          matchId: doc.id,
+          ...doc.data()
+        } as IMatch);
+      });
+      callback(matches);
+    });
+  }
+
   async sendMessage(chatId: string, receiverId: string, message: string): Promise<void> {
     try {
       const currentUid = this.authSrv.getCurrentUserUid();
@@ -227,6 +253,7 @@ private shuffleArray<T>(array: T[]): T[] {
         read: false
       });
 
+      // Update last message in chat
       const chatsRef = collection(this.firestore, 'chats');
       const chatQuery = query(chatsRef, where('chatId', '==', chatId));
       const chatSnapshot = await getDocs(chatQuery);
@@ -243,7 +270,6 @@ private shuffleArray<T>(array: T[]): T[] {
     }
   }
 
-  
   subscribeToMessages(chatId: string, callback: (messages: IMessage[]) => void) {
     const messagesRef = collection(this.firestore, 'messages');
     const q = query(
@@ -264,7 +290,6 @@ private shuffleArray<T>(array: T[]): T[] {
     });
   }
 
-  
   async getUserProfile(userId: string): Promise<IPublicProfile | null> {
     try {
       const userDoc = doc(this.firestore, 'users', userId);

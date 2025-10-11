@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule ,CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from './componets/input/input.component';
 import { ButtonComponent } from './componets/button/button.component';
@@ -15,11 +15,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { WallpaperService } from '../services/wallpaper/wallpaper-service';
 import { TinderService } from '../services/tinder/tinder-service';
 import { MatchModalComponent } from './componets/match-modal/match-modal.component';
+import { ProfileDetailModalComponent } from './componets/profile-detail-modal/profile-detail-modal.component';
 
 
 
 const myModules = [ CommonModule, FormsModule, ReactiveFormsModule, IonicModule, RouterModule,TranslateModule ];
-const myComponents = [ InputComponent, ButtonComponent, ToggleTranslateComponent, LinkComponent, CardComponent, FloatingButtonComponent,MatchModalComponent ];
+const myComponents = [ InputComponent, ButtonComponent, ToggleTranslateComponent, LinkComponent, CardComponent, FloatingButtonComponent,MatchModalComponent,ProfileDetailModalComponent ];
 const myProviders = [ User,ActionSheet,WallpaperService,TinderService ];
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ providers:[...myProviders],
 
   ],
 
-  exports:[...myModules,...myComponents]
+  exports:[...myModules,...myComponents],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
 })
 export class SharedModule { }

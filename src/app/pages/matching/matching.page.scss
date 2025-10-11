@@ -69,6 +69,25 @@
   object-fit: cover;
 }
 
+.info-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 48px;
+  height: 48px;
+  z-index: 10;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  ion-icon {
+    font-size: 24px;
+    color: #fd5068;
+  }
+}
+
 .profile-info {
   position: absolute;
   bottom: 0;
@@ -102,6 +121,10 @@
     font-size: 14px;
     margin: 10px 0;
     line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   
   .passions {
@@ -116,6 +139,10 @@
       border-radius: 20px;
       font-size: 13px;
       font-weight: 600;
+      
+      &.more {
+        background: rgba(255, 255, 255, 0.3);
+      }
     }
   }
 }
@@ -180,6 +207,13 @@
   .profile-card {
     width: 95%;
     height: 550px;
+  }
+  
+  .info-button {
+    width: 44px;
+    height: 44px;
+    top: 12px;
+    right: 12px;
   }
   
   .action-buttons ion-button {

@@ -44,6 +44,15 @@
            alt="Profile" 
            class="profile-image">
       
+      <ion-button 
+        class="info-button"
+        fill="solid"
+        color="light"
+        shape="round"
+        (click)="showProfileDetail()">
+        <ion-icon name="information" slot="icon-only"></ion-icon>
+      </ion-button>
+      
       <div class="profile-info">
         <div class="name-age">
           <h2>{{ currentProfile.name }}, {{ calculateAge(currentProfile.birthDate) }}</h2>
@@ -57,8 +66,11 @@
         <p class="bio" *ngIf="currentProfile.bio">{{ currentProfile.bio }}</p>
         
         <div class="passions" *ngIf="currentProfile.passions?.length">
-          <span class="passion-tag" *ngFor="let passion of currentProfile.passions">
+          <span class="passion-tag" *ngFor="let passion of currentProfile.passions.slice(0, 3)">
             {{ passion.category }}
+          </span>
+          <span *ngIf="currentProfile.passions.length > 3" class="passion-tag more">
+            +{{ currentProfile.passions.length - 3 }}
           </span>
         </div>
       </div>

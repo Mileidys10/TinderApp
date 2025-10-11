@@ -49,20 +49,16 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { authGuardPipe: isNotLogged },
   },
-  /*{
-    path: 'chat/:chatId', 
+  {
+    path: 'chat/:chatId',
     loadChildren: () => import('./pages/chat/chat.module').then(m => m.ChatPageModule),
     canActivate: [AuthGuard],
     data: { authGuardPipe: isNotLogged },
-  },*/
+  },
   {
     path: '**',
     redirectTo: 'welcome',
     pathMatch: 'full'
-  },
-  {
-    path: 'chat',
-    loadChildren: () => import('./pages/chat/chat.module').then( m => m.ChatPageModule)
   }
 ];
 

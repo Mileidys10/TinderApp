@@ -6,7 +6,7 @@ import { IPublicProfile } from 'src/app/interfaces/tinder-user';
 import { TinderService } from 'src/app/services/tinder/tinder-service';
 import { ModalController } from '@ionic/angular';
 import { MatchModalComponent } from 'src/app/shared/componets/match-modal/match-modal.component';
-
+import { ProfileDetailModalComponent } from 'src/app/shared/componets/profile-detail-modal/profile-detail-modal.component';
 
 @Component({
   selector: 'app-matching',
@@ -58,7 +58,19 @@ export class MatchingPage implements OnInit {
     }
   }
 
+  async showProfileDetail() {
+    if (!this.currentProfile) return;
 
+    const modal = await this.modalController.create({
+      component: ProfileDetailModalComponent,
+      cssClass: 'profile-detail-modal',
+      componentProps: {
+        profile: this.currentProfile
+      }
+    });
+
+    await modal.present();
+  }
 
   onTouchStart(event: TouchEvent) {
     this.startX = event.touches[0].clientX;
@@ -66,58 +78,56 @@ export class MatchingPage implements OnInit {
   }
 
   onTouchMove(event: TouchEvent) {
-  if (!this.isDragging) return;
-  
-  this.currentX = event.touches[0].clientX;
-  const deltaX = this.currentX - this.startX;
-  
-  const card = this.profileCard.nativeElement;
-  const rotation = deltaX * 0.05;
-  
-  card.style.transition = 'none';
-  card.style.transform = `translateX(${deltaX}px) rotate(${rotation}deg)`;
-  
-  if (deltaX > 50) {
-    card.classList.add('like-overlay');
-    card.classList.remove('nope-overlay');
-  } else if (deltaX < -50) {
-    card.classList.add('nope-overlay');
-    card.classList.remove('like-overlay');
-  } else {
-    card.classList.remove('like-overlay', 'nope-overlay');
+    if (!this.isDragging) return;
+    
+    this.currentX = event.touches[0].clientX;
+    const deltaX = this.currentX - this.startX;
+    
+    const card = this.profileCard.nativeElement;
+    const rotation = deltaX * 0.05;
+    
+    card.style.transition = 'none';
+    card.style.transform = `translateX(${deltaX}px) rotate(${rotation}deg)`;
+    
+    if (deltaX > 50) {
+      card.classList.add('like-overlay');
+      card.classList.remove('nope-overlay');
+    } else if (deltaX < -50) {
+      card.classList.add('nope-overlay');
+      card.classList.remove('like-overlay');
+    } else {
+      card.classList.remove('like-overlay', 'nope-overlay');
+    }
   }
-}
 
   onTouchEnd(event: TouchEvent) {
-  if (!this.isDragging) return;
-  
-  const deltaX = this.currentX - this.startX;
-  const card = this.profileCard.nativeElement;
-  
-  if (Math.abs(deltaX) > 100) {
-    if (deltaX > 0) {
-      this.animateSwipe('right');
-      this.onLike();
-    } else {
-      this.animateSwipe('left');
-      this.onPass();
-    }
-  } else {
-    card.style.transition = 'transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)';
-    card.style.transform = 'translateX(0) rotate(0)';
-    card.classList.remove('like-overlay', 'nope-overlay');
+    if (!this.isDragging) return;
     
-    setTimeout(() => {
-      card.style.transition = 'none';
-    }, 300);
+    const deltaX = this.currentX - this.startX;
+    const card = this.profileCard.nativeElement;
+    
+    if (Math.abs(deltaX) > 100) {
+      if (deltaX > 0) {
+        this.animateSwipe('right');
+        this.onLike();
+      } else {
+        this.animateSwipe('left');
+        this.onPass();
+      }
+    } else {
+      card.style.transition = 'transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)';
+      card.style.transform = 'translateX(0) rotate(0)';
+      card.classList.remove('like-overlay', 'nope-overlay');
+      
+      setTimeout(() => {
+        card.style.transition = 'none';
+      }, 300);
+    }
+    
+    this.isDragging = false;
+    this.startX = 0;
+    this.currentX = 0;
   }
-  
-  this.isDragging = false;
-  this.startX = 0;
-  this.currentX = 0;
-}
-
-
 
   private animateSwipe(direction: 'left' | 'right') {
     const card = this.profileCard.nativeElement;
@@ -132,8 +142,6 @@ export class MatchingPage implements OnInit {
       card.classList.remove('like-overlay', 'nope-overlay');
     }, 300);
   }
-
-  
 
   async onLike() {
     if (!this.currentProfile) return;
@@ -154,8 +162,7 @@ export class MatchingPage implements OnInit {
     this.nextProfile();
   }
   
-  
-    async showMatchModal(chatId: string) {
+  async showMatchModal(chatId: string) {
     const modal = await this.modalController.create({
       component: MatchModalComponent,
       cssClass: 'match-modal-class',
@@ -169,17 +176,6 @@ export class MatchingPage implements OnInit {
     
     await modal.present();
   }
-
-
-
-
-
-
-
-
-
-
-
 
   async onPass() {
     if (!this.currentProfile) return;
