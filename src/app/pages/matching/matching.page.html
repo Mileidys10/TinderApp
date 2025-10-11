@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Discover</ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button (click)="goToMatches()">
+        <ion-icon name="chatbubbles"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="matching-content">
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent" color="danger"></ion-spinner>
+    <p>Loading profiles...</p>
+  </div>
+
+  <div *ngIf="noMoreProfiles && !isLoading" class="no-profiles">
+    <ion-icon name="people-outline" size="large"></ion-icon>
+    <h2>No More Profiles</h2>
+    <p>Check back later for new matches!</p>
+    <ion-button color="danger" (click)="goBack()">
+      Go Back
+    </ion-button>
+  </div>
+
+  <div *ngIf="currentProfile && !isLoading && !noMoreProfiles" 
+       class="profile-container">
+    
+    <div #profileCard 
+         class="profile-card"
+         (touchstart)="onTouchStart($event)"
+         (touchmove)="onTouchMove($event)"
+         (touchend)="onTouchEnd($event)">
+      
+      <img [src]="currentProfile.photos[0] || 'assets/placeholder.jpg'" 
+           alt="Profile" 
+           class="profile-image">
+      
+      <div class="profile-info">
+        <div class="name-age">
+          <h2>{{ currentProfile.name }}, {{ calculateAge(currentProfile.birthDate) }}</h2>
+        </div>
+        
+        <div class="location" *ngIf="currentProfile.city">
+          <ion-icon name="location"></ion-icon>
+          <span>{{ currentProfile.city }}, {{ currentProfile.country }}</span>
+        </div>
+        
+        <p class="bio" *ngIf="currentProfile.bio">{{ currentProfile.bio }}</p>
+        
+        <div class="passions" *ngIf="currentProfile.passions?.length">
+          <span class="passion-tag" *ngFor="let passion of currentProfile.passions">
+            {{ passion.category }}
+          </span>
+        </div>
+      </div>
+      
+      <div class="like-indicator">❤️</div>
+      <div class="nope-indicator">✕</div>
+    </div>
+
+    <div class="action-buttons">
+      <ion-button 
+        class="pass-button" 
+        fill="solid" 
+        shape="round"
+        (click)="onPass()">
+        <ion-icon name="close" size="large"></ion-icon>
+      </ion-button>
+
+      <ion-button 
+        class="like-button" 
+        fill="solid" 
+        color="danger"
+        shape="round"
+        (click)="onLike()">
+        <ion-icon name="heart" size="large"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

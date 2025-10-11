@@ -1,38 +1,153 @@
-<ion-content>
+<ion-content class="register-content">
+  <div class="register-header">
+    <h1>Create Account</h1>
+    <p>Find your perfect match</p>
+  </div>
+
   <ion-card>
     <ion-card-content>
       <form [formGroup]="registerForm" (ngSubmit)="doRegister()">
         <ion-grid>
+          <!-- Basic Info -->
           <ion-row>
-            <ion-col>
-              <app-input type="text" [label]="'REGISTER.NAME' | translate" placeholder="Jane"
-                [control]="name"></app-input>
+            <ion-col size="6">
+              <app-input 
+                type="text" 
+                label="First Name" 
+                placeholder="Jane"
+                [control]="name">
+              </app-input>
             </ion-col>
+            <ion-col size="6">
+              <app-input 
+                type="text" 
+                label="Last Name" 
+                placeholder="Doe"
+                [control]="lastName">
+              </app-input>
+            </ion-col>
+          </ion-row>
 
+          <ion-row>
             <ion-col>
-              <app-input type="text" [label]="'REGISTER.LASTNAME' | translate" placeholder="Doe"
-                [control]="lastName"></app-input>
+              <app-input 
+                type="email" 
+                label="Email" 
+                placeholder="jane@example.com"
+                [control]="email">
+              </app-input>
             </ion-col>
           </ion-row>
+
           <ion-row>
             <ion-col>
-              <app-input type="email" [label]="'REGISTER.EMAIL' | translate" placeholder="jane@doe.com"
-                [control]="email"></app-input>
+              <app-input 
+                type="password" 
+                label="Password" 
+                placeholder="Min 8 characters"
+                [control]="password">
+              </app-input>
             </ion-col>
           </ion-row>
+
+          <!-- Extended Info -->
           <ion-row>
             <ion-col>
-              <app-input type="password" [label]="'REGISTER.PASSWORD' | translate" placeholder="**************"
-                [control]="password"></app-input>
+              <ion-item>
+                <ion-label position="stacked">Birth Date</ion-label>
+                <ion-datetime 
+                  displayFormat="DD/MM/YYYY"
+                  [formControl]="birthDate"
+                  placeholder="Select date">
+                </ion-datetime>
+              </ion-item>
             </ion-col>
           </ion-row>
+
           <ion-row>
-            <ion-col>
-              <app-link link="/login" [value]="'REGISTER.' | translate"></app-link> </ion-col>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label position="stacked">Country</ion-label>
+                <ion-select [formControl]="country" placeholder="Select">
+                  <ion-select-option *ngFor="let c of countries" [value]="c">
+                    {{ c }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <app-input 
+                type="text" 
+                label="City" 
+                placeholder="Medellín"
+                [control]="city">
+              </app-input>
+            </ion-col>
           </ion-row>
+
           <ion-row>
             <ion-col>
-              <app-button type="submit" color="dark" [disabled]="registerForm.invalid" value="Register"></app-button>
+              <ion-item>
+                <ion-label position="stacked">Gender</ion-label>
+                <ion-select [formControl]="gender" placeholder="Select">
+                  <ion-select-option *ngFor="let g of genders" [value]="g.value">
+                    {{ g.label }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="stacked">Bio (Optional)</ion-label>
+                <ion-textarea 
+                  [formControl]="bio"
+                  placeholder="Tell us about yourself..."
+                  rows="3">
+                </ion-textarea>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <!-- Passions -->
+          <ion-row>
+            <ion-col>
+              <div class="passions-section">
+                <h3>Select Your Passions (3-5)</h3>
+                <p class="passions-count">{{ selectedPassions.length }} / 5 selected</p>
+                
+                <div class="passions-grid">
+                  <ion-chip 
+                    *ngFor="let passion of availablePassions"
+                    [color]="isPassionSelected(passion) ? 'danger' : 'light'"
+                    (click)="togglePassion(passion)">
+                    {{ passion }}
+                  </ion-chip>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <!-- Actions -->
+          <ion-row>
+            <ion-col>
+              <app-link 
+                link="/login" 
+                value="Already have an account? Sign in">
+              </app-link>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col>
+              <app-button 
+                type="submit" 
+                color="danger" 
+                [disabled]="registerForm.invalid || selectedPassions.length < 3" 
+                value="CREATE ACCOUNT">
+              </app-button>
             </ion-col>
           </ion-row>
         </ion-grid>

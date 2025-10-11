@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Matches</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="matches-content">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshMatches($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent" color="danger"></ion-spinner>
+    <p>Loading matches...</p>
+  </div>
+
+  <div *ngIf="!isLoading && matches.length === 0" class="no-matches">
+    <ion-icon name="heart-dislike-outline" size="large"></ion-icon>
+    <h2>No Matches Yet</h2>
+    <p>Start swiping to find your matches!</p>
+    <ion-button color="danger" routerLink="/matching">
+      Start Swiping
+    </ion-button>
+  </div>
+
+  <ion-list *ngIf="!isLoading && matches.length > 0" class="matches-list">
+    <ion-item 
+      *ngFor="let match of matches" 
+      button
+      (click)="openChat(match)"
+      class="match-item">
+      
+      <ion-avatar slot="start">
+        <img [src]="match.profile.photos[0] || 'assets/placeholder.jpg'" 
+             alt="{{ match.profile.name }}">
+      </ion-avatar>
+      
+      <ion-label>
+        <h2>{{ match.profile.name }}</h2>
+        <p *ngIf="match.lastMessage" class="last-message">
+          {{ match.lastMessage }}
+        </p>
+        <p *ngIf="!match.lastMessage" class="no-message">
+          Start a conversation!
+        </p>
+      </ion-label>
+      
+      <div slot="end" class="match-meta">
+        <span class="time">{{ formatTime(match.lastMessageTime || match.match.matchedAt) }}</span>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

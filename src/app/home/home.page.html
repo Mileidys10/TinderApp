@@ -1,87 +1,71 @@
 <ion-header>
-  <ion-toolbar color="dark">
-    <div class="ion-padding"></div>
-  </ion-toolbar>
-  <ion-toolbar color="dark">
-    <ion-title> {{ 'HOME.TITLE' | translate }} </ion-title>
+  <ion-toolbar color="danger">
+    <ion-title>
+      <div class="header-logo">
+        <ion-icon name="flame"></ion-icon>
+        <span>tinder</span>
+      </div>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ion-refresher slot="fixed" (ionRefresh)="refreshImages($event)">
-    <ion-refresher-content
-      [pullingText]="'HOME.PULL_TO_REFRESH' | translate"
-      [refreshingText]="'HOME.REFRESHING' | translate">
-    </ion-refresher-content>
-  </ion-refresher>
-
-  <div *ngIf="isLoading" class="loading-container">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>{{ 'HOME.LOADING_IMAGES' | translate }}</p>
+<ion-content class="home-content">
+  <div class="welcome-section">
+    <h1>Welcome back, {{ userName }}!</h1>
+    <p>Ready to find your match?</p>
   </div>
 
-  <div *ngIf="!isLoading">
-    <div *ngIf="imgs && imgs.length > 0">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="6" *ngFor="let img of imgs; let i = index">
-            <app-card 
-              class="ion-padding image-card" 
-              (click)="openActions(img)" 
-              [image]="img">
-            </app-card>
-            
-            <div class="image-actions">
-              <ion-button 
-                fill="clear" 
-                size="small" 
-                color="primary"
-                class="wallpaper-btn"
-                (click)="openActions(img); $event.stopPropagation()">
-                <ion-icon name="phone-portrait-outline"></ion-icon>
-              </ion-button>
-              
-              <ion-button 
-                fill="clear" 
-                size="small" 
-                color="danger"
-                class="delete-btn"
-                (click)="deleteImage(img, i); $event.stopPropagation()">
-                <ion-icon name="trash-outline"></ion-icon>
-              </ion-button>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
-
-    <div *ngIf="!imgs || imgs.length === 0" class="empty-state">
-      <ion-icon name="image-outline" size="large"></ion-icon>
-      <h2>{{ 'HOME.NO_IMAGES' | translate }}</h2>
-      <p>{{ 'HOME.NO_IMAGES_DESCRIPTION' | translate }}</p>
-      
-      <ion-button 
-        color="primary" 
-        size="default"
-        class="add-first-image"
-        (click)="pickImage()">
-        <ion-icon name="add-circle-outline" slot="start"></ion-icon>
-        {{ 'HOME.ADD_FIRST_WALLPAPER' | translate }}
-      </ion-button>
+  <div class="stats-card">
+    <div class="stat-item">
+      <ion-icon name="heart" color="danger"></ion-icon>
+      <div>
+        <h3>{{ matchesCount }}</h3>
+        <p>Matches</p>
+      </div>
     </div>
   </div>
 
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <app-floating-button
-      color="dark"
-      icon="chevron-up-circle"
-      side="top"
-      [buttons]="[
-        { icon: 'log-out-outline', action: 'logout' },
-        { icon: 'add-circle-outline', action: 'add' },
-        { icon: 'person-circle-outline', action: 'profile' },
-      ]"
-      (buttonClick)="onButtonClick($event)">
-    </app-floating-button>
-  </ion-fab>
+  <div class="action-cards">
+    <ion-card button (click)="goToMatching()" class="action-card discover-card">
+      <ion-card-content>
+        <div class="card-icon">
+          <ion-icon name="people" size="large"></ion-icon>
+        </div>
+        <h2>Discover</h2>
+        <p>Start swiping and find your match</p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card button (click)="goToMatches()" class="action-card matches-card">
+      <ion-card-content>
+        <div class="card-icon">
+          <ion-icon name="chatbubbles" size="large"></ion-icon>
+        </div>
+        <h2>Messages</h2>
+        <p>Chat with your matches</p>
+        <ion-badge *ngIf="matchesCount > 0" color="danger">
+          {{ matchesCount }}
+        </ion-badge>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card button (click)="goToProfile()" class="action-card profile-card">
+      <ion-card-content>
+        <div class="card-icon">
+          <ion-icon name="person" size="large"></ion-icon>
+        </div>
+        <h2>Profile</h2>
+        <p>Edit your profile and settings</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ion-button 
+    expand="block" 
+    color="light" 
+    class="logout-button"
+    (click)="logOut()">
+    <ion-icon name="log-out-outline" slot="start"></ion-icon>
+    Sign Out
+  </ion-button>
 </ion-content>

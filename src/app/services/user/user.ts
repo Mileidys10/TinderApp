@@ -1,21 +1,8 @@
 import { Injectable } from '@angular/core';
-import { IUserCreate } from 'src/app/interfaces/user-interface';
 import { Auth } from 'src/app/provide/auth/auth';
 import { Query } from 'src/app/provide/query/query';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
-
-export interface IWallpaper {
-  path: string;
-  url: string;
-  createdAt: number;
-}
-
-export interface IUserData {
-  uid: string;
-  name: string;
-  lastName: string;
-  wallpapers: IWallpaper[];
-}
+import { ITinderUser } from 'src/app/interfaces/tinder-user';
 
 @Injectable({
   providedIn: 'root'
@@ -28,65 +15,125 @@ export class User {
     private readonly firestore: Firestore,
   ) {}
 
-  async create(user: IUserCreate): Promise<void> {
+ 
+  async create(userData: any): Promise<void> {
     try {
-      const uid = await this.authSrv.register(user.email, user.password);
-      await this.querySrv.set("users", uid, {
+      const uid = await this.authSrv.register(userData.email, userData.password);
+      
+      if (!uid) throw new Error('Failed to create user');
+
+      const age = this.calculateAge(userData.birthDate);
+
+      const userDoc: Partial<ITinderUser> = {
         uid,
-        name: user.name,
-        lastName: user.lastName,
-        wallpapers: [] 
-      });
-      await this.logOut();
+        name: userData.name,
+        lastName: userData.lastName,
+        birthDate: userData.birthDate,
+        email: userData.email,
+        country: userData.country || '',
+        city: userData.city || '',
+        gender: userData.gender,
+        showGenderProfile: userData.showGenderProfile ?? true,
+        passions: userData.passions || [],
+        photos: userData.photos || [],
+        bio: userData.bio || '',
+        age
+      };
+
+      await this.querySrv.set("users", uid, userDoc);
+      await this.logOut(); 
     } catch (error) {
-      console.log(error);
+      console.error('Error creating user:', error);
       throw error;
     }
   }
 
-  public async UpdateUser(name: string, lastName: string) {
+
+  public async UpdateUser(data: Partial<ITinderUser>, value?: any) {
     try {
       const uuid = this.getCurrentuid();
       if (!uuid) throw new Error('User not authenticated');
       
-      await this.querySrv.update('users', uuid, {
-        name: name,
-        lastName: lastName
-      });
+      if (data.birthDate) {
+        data.age = this.calculateAge(data.birthDate);
+      }
+
+      await this.querySrv.update('users', uuid, data);
       return uuid;
     } catch (error) {
-      const errorMsg = this.extractTextInParentheses((error as any).message) || "Error desconocido";
-      throw new Error(errorMsg);
+      console.error('Error updating user:', error);
+      throw error;
     }
   }
 
-  public async addWallpaper(path: string, url: string): Promise<void> {
+ 
+  public async addPhoto(photoUrl: string): Promise<void> {
     try {
       const uuid = this.getCurrentuid();
       if (!uuid) throw new Error('User not authenticated');
 
       const userData = await this.getUserData();
-      const currentWallpapers = userData?.wallpapers || [];
+      const currentPhotos = userData?.photos || [];
 
-      const newWallpaper: IWallpaper = {
-        path,
-        url,
-        createdAt: Date.now()
-      };
+      if (currentPhotos.length >= 6) {
+        throw new Error('Maximum 6 photos allowed');
+      }
 
-      const updatedWallpapers = [newWallpaper, ...currentWallpapers];
+      const updatedPhotos = [...currentPhotos, photoUrl];
 
       await this.querySrv.update('users', uuid, {
-        wallpapers: updatedWallpapers
+        photos: updatedPhotos
       });
 
     } catch (error) {
-      console.error('Error adding wallpaper:', error);
+      console.error('Error adding photo:', error);
       throw error;
     }
   }
 
-  public async getUserData(): Promise<IUserData | null> {
+ 
+  public async removePhoto(photoUrl: string): Promise<void> {
+    try {
+      const uuid = this.getCurrentuid();
+      if (!uuid) throw new Error('User not authenticated');
+
+      const userData = await this.getUserData();
+      if (!userData || !userData.photos) return;
+
+      const updatedPhotos = userData.photos.filter(
+        photo => photo !== photoUrl
+      );
+
+      await this.querySrv.update('users', uuid, {
+        photos: updatedPhotos
+      });
+
+    } catch (error) {
+      console.error('Error removing photo:', error);
+      throw error;
+    }
+  }
+
+ 
+  public async updatePassions(passions: string[]): Promise<void> {
+    try {
+      const uuid = this.getCurrentuid();
+      if (!uuid) throw new Error('User not authenticated');
+
+      const passionsArray = passions.map(p => ({ category: p }));
+
+      await this.querySrv.update('users', uuid, {
+        passions: passionsArray
+      });
+
+    } catch (error) {
+      console.error('Error updating passions:', error);
+      throw error;
+    }
+  }
+
+ 
+  public async getUserData(): Promise<ITinderUser | null> {
     try {
       const uuid = this.getCurrentuid();
       if (!uuid) return null;
@@ -95,7 +142,7 @@ export class User {
       const userSnapshot = await getDoc(userDoc);
 
       if (userSnapshot.exists()) {
-        return userSnapshot.data() as IUserData;
+        return userSnapshot.data() as ITinderUser;
       }
       return null;
     } catch (error) {
@@ -104,45 +151,22 @@ export class User {
     }
   }
 
-  public async getUserWallpapers(): Promise<string[]> {
-    try {
-      const userData = await this.getUserData();
-      if (!userData || !userData.wallpapers) return [];
-      
-      return userData.wallpapers
-        .sort((a, b) => b.createdAt - a.createdAt)
-        .map(wallpaper => wallpaper.url);
-    } catch (error) {
-      console.error('Error getting user wallpapers:', error);
-      return [];
+  
+  private calculateAge(birthDate: string): number {
+    const birth = new Date(birthDate);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
     }
-  }
-
-  public async removeWallpaper(urlToRemove: string): Promise<void> {
-    try {
-      const uuid = this.getCurrentuid();
-      if (!uuid) throw new Error('User not authenticated');
-
-      const userData = await this.getUserData();
-      if (!userData || !userData.wallpapers) return;
-
-      const updatedWallpapers = userData.wallpapers.filter(
-        wallpaper => wallpaper.url !== urlToRemove
-      );
-
-      await this.querySrv.update('users', uuid, {
-        wallpapers: updatedWallpapers
-      });
-
-    } catch (error) {
-      console.error('Error removing wallpaper:', error);
-      throw error;
-    }
+    
+    return age;
   }
 
   public getCurrentuid() {
-    const uuid = this.authSrv.getCurrentUserUid();
-    return uuid;
+    return this.authSrv.getCurrentUserUid();
   }
 
   async logIn(email: string, password: string) {
@@ -151,10 +175,5 @@ export class User {
 
   async logOut() {
     await this.authSrv.logOut();
-  }
-
-  public extractTextInParentheses(text: string): string | null {
-    const match = text.match(/\((.*?)\)/);
-    return match ? match[1] : null;
   }
 }

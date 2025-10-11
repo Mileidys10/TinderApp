@@ -65,66 +65,96 @@ public class WallpaperPlugin extends Plugin {
   private void setWallpaperInternal(PluginCall call, int flags, String screenType) {
     String imagePath = call.getString("imagePath");
 
-    Log.d(TAG, "Setting wallpaper for " + screenType + " with path: " + imagePath);
+    Log.d(TAG, "=== WALLPAPER DEBUG START ===");
+    Log.d(TAG, "Setting wallpaper for: " + screenType);
+    Log.d(TAG, "Image path received: " + imagePath);
+    Log.d(TAG, "Android version: " + Build.VERSION.SDK_INT);
 
     if (imagePath == null || imagePath.isEmpty()) {
+      Log.e(TAG, "Image path is null or empty");
       call.reject(INVALID_IMAGE_PATH);
       return;
     }
 
-    // Verificar permisos antes de proceder
-    if (!hasAllWallpaperPermissions()) {
-      Log.e(TAG, "Missing wallpaper permissions");
-      call.reject(PERMISSION_DENIED + ". Please check app permissions in Settings.");
+    boolean hasSetWallpaper = hasSetWallpaperPermission();
+    boolean hasReadStorage = hasReadStoragePermission();
+
+    Log.d(TAG, "SET_WALLPAPER permission: " + hasSetWallpaper);
+    Log.d(TAG, "READ_STORAGE permission: " + hasReadStorage);
+
+    if (!hasSetWallpaper) {
+      Log.e(TAG, "Missing SET_WALLPAPER permission");
+      call.reject(PERMISSION_DENIED + ". Missing SET_WALLPAPER permission.");
+      return;
+    }
+
+    if (!hasReadStorage && (imagePath.startsWith("content://") || imagePath.startsWith("file://"))) {
+      Log.e(TAG, "Missing READ_STORAGE permission for file access");
+      call.reject(PERMISSION_DENIED + ". Missing READ_STORAGE permission for file access.");
       return;
     }
 
     try {
+      Log.d(TAG, "Loading bitmap from path...");
       Bitmap bitmap = loadBitmapFromPath(imagePath);
+
       if (bitmap == null) {
-        call.reject("Failed to load image from path: " + imagePath);
+        Log.e(TAG, "Failed to load bitmap - bitmap is null");
+        call.reject("Failed to load image from path: " + imagePath + ". Check if the image exists and is accessible.");
         return;
       }
 
+      Log.d(TAG, "Bitmap loaded successfully. Dimensions: " + bitmap.getWidth() + "x" + bitmap.getHeight());
+
       WallpaperManager wallpaperManager = WallpaperManager.getInstance(getContext());
+      Log.d(TAG, "WallpaperManager obtained");
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && flags != -1) {
+        Log.d(TAG, "Setting wallpaper with flags: " + flags);
         wallpaperManager.setBitmap(bitmap, null, true, flags);
       } else {
-        // Para versiones anteriores o cuando flags es -1
+        Log.d(TAG, "Setting wallpaper with legacy method");
         wallpaperManager.setBitmap(bitmap);
       }
 
       JSObject ret = new JSObject();
       ret.put("success", true);
       ret.put("message", "Wallpaper set successfully for " + screenType);
-      call.resolve(ret);
 
       Log.d(TAG, "Wallpaper set successfully for " + screenType);
+      Log.d(TAG, "=== WALLPAPER DEBUG END ===");
+
+      call.resolve(ret);
 
     } catch (IOException e) {
       Log.e(TAG, "IOException setting wallpaper: " + e.getMessage());
+      Log.e(TAG, "IOException details", e);
       call.reject(WALLPAPER_SET_ERROR + ": " + e.getMessage());
     } catch (SecurityException e) {
       Log.e(TAG, "SecurityException setting wallpaper: " + e.getMessage());
+      Log.e(TAG, "SecurityException details", e);
       call.reject(PERMISSION_DENIED + ": " + e.getMessage());
     } catch (Exception e) {
       Log.e(TAG, "Unexpected error setting wallpaper: " + e.getMessage());
+      Log.e(TAG, "Unexpected error details", e);
       call.reject("Unexpected error: " + e.getMessage());
     }
   }
 
   @PluginMethod
   public void checkPermissions(PluginCall call) {
-    JSObject ret = new JSObject();
     boolean hasSetWallpaper = hasSetWallpaperPermission();
     boolean hasReadStorage = hasReadStoragePermission();
 
+    Log.d(TAG, "=== PERMISSION CHECK ===");
+    Log.d(TAG, "SET_WALLPAPER: " + hasSetWallpaper);
+    Log.d(TAG, "READ_STORAGE: " + hasReadStorage);
+    Log.d(TAG, "Overall granted: " + (hasSetWallpaper && hasReadStorage));
+
+    JSObject ret = new JSObject();
     ret.put("granted", hasSetWallpaper && hasReadStorage);
     ret.put("setWallpaper", hasSetWallpaper);
     ret.put("readStorage", hasReadStorage);
-
-    Log.d(TAG, "Permissions check - SET_WALLPAPER: " + hasSetWallpaper + ", READ_STORAGE: " + hasReadStorage);
 
     call.resolve(ret);
   }
@@ -132,20 +162,18 @@ public class WallpaperPlugin extends Plugin {
   @PluginMethod
   public void requestPermissions(PluginCall call) {
     if (hasAllWallpaperPermissions()) {
+      Log.d(TAG, "All permissions already granted");
       JSObject ret = new JSObject();
       ret.put("granted", true);
       call.resolve(ret);
       return;
     }
 
-    // Solicitar permisos
     String[] permissions = getNeededPermissions();
 
     if (permissions.length > 0) {
       Log.d(TAG, "Requesting permissions: " + String.join(", ", permissions));
       ActivityCompat.requestPermissions(getActivity(), permissions, 1001);
-
-      // El resultado se manejará en handleRequestPermissionsResult
       saveCall(call);
     } else {
       JSObject ret = new JSObject();
@@ -166,16 +194,16 @@ public class WallpaperPlugin extends Plugin {
       return;
     }
 
-    JSObject ret = new JSObject();
     boolean allGranted = true;
-
-    for (int result : grantResults) {
-      if (result != PackageManager.PERMISSION_GRANTED) {
+    for (int i = 0; i < permissions.length; i++) {
+      boolean granted = grantResults[i] == PackageManager.PERMISSION_GRANTED;
+      Log.d(TAG, "Permission " + permissions[i] + ": " + granted);
+      if (!granted) {
         allGranted = false;
-        break;
       }
     }
 
+    JSObject ret = new JSObject();
     ret.put("granted", allGranted);
     Log.d(TAG, "All permissions granted: " + allGranted);
     savedCall.resolve(ret);
@@ -192,11 +220,9 @@ public class WallpaperPlugin extends Plugin {
 
   private boolean hasReadStoragePermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      // Android 13+ usa READ_MEDIA_IMAGES
       return ContextCompat.checkSelfPermission(getContext(), "android.permission.READ_MEDIA_IMAGES")
         == PackageManager.PERMISSION_GRANTED;
     } else {
-      // Versiones anteriores usan READ_EXTERNAL_STORAGE
       return ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
         == PackageManager.PERMISSION_GRANTED;
     }
@@ -221,6 +247,7 @@ public class WallpaperPlugin extends Plugin {
   }
 
   private Bitmap loadBitmapFromPath(String imagePath) {
+    Log.d(TAG, "=== BITMAP LOADING DEBUG ===");
     Log.d(TAG, "Loading bitmap from path: " + imagePath);
 
     try {
@@ -228,45 +255,66 @@ public class WallpaperPlugin extends Plugin {
       InputStream inputStream = null;
 
       if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
-        // Cargar desde URL
+        Log.d(TAG, "Loading from HTTP URL");
         URL url = new URL(imagePath);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(15000);
         connection.setDoInput(true);
         connection.connect();
-        inputStream = connection.getInputStream();
 
-      } else if (imagePath.startsWith("content://") || imagePath.startsWith("file://")) {
-        // Cargar desde URI
+        int responseCode = connection.getResponseCode();
+        Log.d(TAG, "HTTP response code: " + responseCode);
+
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+          inputStream = connection.getInputStream();
+        } else {
+          Log.e(TAG, "HTTP request failed with response code: " + responseCode);
+          return null;
+        }
+
+      } else if (imagePath.startsWith("content://")) {
+        Log.d(TAG, "Loading from content URI");
+        Uri uri = Uri.parse(imagePath);
+        inputStream = context.getContentResolver().openInputStream(uri);
+
+      } else if (imagePath.startsWith("file://")) {
+        Log.d(TAG, "Loading from file URI");
         Uri uri = Uri.parse(imagePath);
         inputStream = context.getContentResolver().openInputStream(uri);
 
       } else if (imagePath.startsWith("/")) {
-        // Ruta absoluta
+        Log.d(TAG, "Loading from absolute path");
         return BitmapFactory.decodeFile(imagePath);
 
       } else {
-        // Asset relativo
+        Log.d(TAG, "Loading from assets");
         inputStream = context.getAssets().open(imagePath);
       }
 
       if (inputStream != null) {
+        Log.d(TAG, "Input stream obtained, decoding bitmap");
         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
         inputStream.close();
 
         if (bitmap != null) {
-          Log.d(TAG, "Bitmap loaded successfully. Size: " + bitmap.getWidth() + "x" + bitmap.getHeight());
+          Log.d(TAG, "Bitmap loaded successfully. Size: " + bitmap.getWidth() + "x" + bitmap.getHeight() + ", Config: " + bitmap.getConfig());
         } else {
-          Log.e(TAG, "Failed to decode bitmap from stream");
+          Log.e(TAG, "Failed to decode bitmap from stream - bitmap is null");
         }
 
         return bitmap;
+      } else {
+        Log.e(TAG, "Failed to obtain input stream");
+        return null;
       }
+
     } catch (FileNotFoundException e) {
-      Log.e(TAG, "File not found: " + e.getMessage());
+      Log.e(TAG, "File not found: " + e.getMessage(), e);
     } catch (IOException e) {
-      Log.e(TAG, "IO error loading bitmap: " + e.getMessage());
+      Log.e(TAG, "IO error loading bitmap: " + e.getMessage(), e);
     } catch (Exception e) {
-      Log.e(TAG, "Unexpected error loading bitmap: " + e.getMessage());
+      Log.e(TAG, "Unexpected error loading bitmap: " + e.getMessage(), e);
     }
 
     Log.e(TAG, "Failed to load bitmap from path: " + imagePath);

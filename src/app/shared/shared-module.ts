@@ -13,12 +13,13 @@ import { CardComponent } from './componets/card/card.component';
 import { FloatingButtonComponent } from './componets/floating-button/floating-button.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { WallpaperService } from '../services/wallpaper/wallpaper-service';
+import { TinderService } from '../services/tinder/tinder-service';
 
 
 
 const myModules = [ CommonModule, FormsModule, ReactiveFormsModule, IonicModule, RouterModule,TranslateModule ];
 const myComponents = [ InputComponent, ButtonComponent, ToggleTranslateComponent, LinkComponent, CardComponent, FloatingButtonComponent ];
-const myProviders = [ User,ActionSheet,WallpaperService ];
+const myProviders = [ User,ActionSheet,WallpaperService,TinderService ];
 @NgModule({
   declarations: [
     ...myComponents,
