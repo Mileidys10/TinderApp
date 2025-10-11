@@ -1,67 +1,147 @@
 {
-    "LOGIN": {
-        "EMAIL": "Correo",
-        "PASSWORD": "Contraseña",
-        "LINK": "¿No tienes una cuenta?",
-        "BUTTON": "Iniciar Sesión"
-    },
-    "REGISTER": {
-        "NAME": "Nombre",
-        "LASTNAME": "Apellido",
-        "EMAIL": "Correo",
-        "PASSWORD": "Contraseña",
-        "LINK": "¿Ya estás registrado?",
-        "BUTTON": "Registrar"
-    },
-    "HOME": {
-        "TITLE": "Mis Fondos de Pantalla",
-        "ACTIONS": "Acciones",
-        "WALLPAPER_ACTIONS": "Opciones de Fondo",
-        "SET_HOME_WALLPAPER": "Establecer como Fondo de Inicio",
-        "SET_LOCK_WALLPAPER": "Establecer como Fondo de Bloqueo",
-        "SET_BOTH_WALLPAPER": "Establecer para Ambas Pantallas",
-        "CANCEL": "Cancelar",
-        "NO_IMAGE_SELECTED": "No hay imagen seleccionada",
-        "SETTING_WALLPAPER": "Estableciendo fondo de pantalla...",
-        "WALLPAPER_ERROR": "Error al establecer el fondo de pantalla",
-        "UPLOADING": "Subiendo imagen...",
-        "IMAGE_UPLOADED": "Imagen subida correctamente",
-        "ERROR_UPLOADING": "Error al subir la imagen",
-        "DELETING": "Eliminando...",
-        "IMAGE_DELETED": "Imagen eliminada",
-        "ERROR_DELETING": "Error al eliminar la imagen",
-        "LOGGING_OUT": "Cerrando sesión...",
-        "PULL_TO_REFRESH": "Desliza para actualizar",
-        "REFRESHING": "Actualizando...",
-        "LOADING_IMAGES": "Cargando tus fondos de pantalla...",
-        "NO_IMAGES": "Aún no tienes fondos de pantalla",
-        "NO_IMAGES_DESCRIPTION": "Toca el botón + para agregar tu primer fondo de pantalla",
-        "ADD_FIRST_WALLPAPER": "Agregar Tu Primer Fondo de Pantalla"
-    },
-    "PROFILE": {
-        "TITLE": "Mi Perfil",
-        "WELCOME": "Bienvenido",
-        "PERSONAL_INFO": "Información Personal",
-        "UPDATE_INFO": "Actualiza tus datos personales",
-        "LANGUAGE": "Idioma",
-        "UPDATE_BUTTON": "Actualizar Perfil",
-        "GO_HOME": "Ir al Inicio",
-        "STATISTICS": "Estadísticas",
-        "WALLPAPERS": "Fondos de Pantalla",
-        "LOADING": "Cargando perfil...",
-        "UPDATING": "Actualizando perfil...",
-        "UPDATE_SUCCESS": "Perfil actualizado correctamente",
-        "UPDATE_ERROR": "Error al actualizar el perfil",
-        "PULL_TO_REFRESH": "Desliza para actualizar",
-        "REFRESHING": "Actualizando..."
-    },
-    "WALLPAPER": {
-        "NOT_SUPPORTED_WEB": "Establecer fondo de pantalla no es compatible con navegadores web",
-        "PERMISSION_DENIED": "Permiso denegado para establecer fondo de pantalla",
-        "SUCCESS": "Fondo de pantalla establecido exitosamente",
-        "ERROR": "Error al establecer el fondo de pantalla",
-        "UNEXPECTED_ERROR": "Ocurrió un error inesperado",
-        "IOS_HELP": "Imagen guardada en Fotos. Ve a Configuración > Fondo de Pantalla > Elegir Nuevo Fondo > Todas las Fotos para establecerlo manualmente.",
-        "ANDROID_HELP": "El fondo de pantalla debería establecerse automáticamente en dispositivos Android."
+  "WELCOME": {
+    "TITLE": "Tinder",
+    "TAGLINE": "¡Es un Match!",
+    "DESCRIPTION_1": "Desliza a la derecha para dar me gusta",
+    "DESCRIPTION_2": "Desliza a la izquierda para pasar",
+    "CREATE_ACCOUNT": "CREAR CUENTA",
+    "SIGN_IN": "INICIAR SESIÓN",
+    "TERMS": "Al tocar Crear Cuenta o Iniciar Sesión, aceptas nuestros Términos"
+  },
+  
+  "LOGIN": {
+    "TITLE": "¡Bienvenido!",
+    "SUBTITLE": "Inicia sesión para continuar",
+    "EMAIL": "Correo electrónico",
+    "PASSWORD": "Contraseña",
+    "BUTTON": "INICIAR SESIÓN",
+    "LINK": "¿No tienes cuenta? Regístrate",
+    "ERROR": {
+      "INVALID": "Email o contraseña inválidos",
+      "REQUIRED": "Por favor completa todos los campos"
     }
+  },
+  
+  "REGISTER": {
+    "TITLE": "Crear Cuenta",
+    "SUBTITLE": "Encuentra tu pareja perfecta",
+    "NAME": "Nombre",
+    "LASTNAME": "Apellido",
+    "EMAIL": "Correo electrónico",
+    "PASSWORD": "Contraseña",
+    "BIRTHDATE": "Fecha de Nacimiento",
+    "COUNTRY": "País",
+    "CITY": "Ciudad",
+    "GENDER": "Género",
+    "BIO": "Biografía (Opcional)",
+    "PHOTOS": "Agregar Fotos (1-6 requeridas)",
+    "PHOTOS_COUNT": "{{count}} / 6 fotos",
+    "PASSIONS": "Selecciona tus Pasiones (3-5)",
+    "PASSIONS_COUNT": "{{count}} / 5 seleccionadas",
+    "BUTTON": "CREAR CUENTA",
+    "LINK": "¿Ya tienes cuenta? Inicia sesión",
+    "ERROR": {
+      "FILL_FIELDS": "Por favor completa todos los campos requeridos",
+      "MIN_PASSIONS": "Por favor selecciona al menos 3 pasiones",
+      "MIN_PHOTOS": "Por favor sube al menos 1 foto",
+      "MAX_PHOTOS": "Máximo 6 fotos permitidas",
+      "MAX_PASSIONS": "Máximo 5 pasiones permitidas"
+    },
+    "SUCCESS": "¡Cuenta creada exitosamente!"
+  },
+  
+  "HOME": {
+    "TITLE": "tinder",
+    "WELCOME": "¡Bienvenido de nuevo, {{name}}!",
+    "SUBTITLE": "¿Listo para encontrar tu match?",
+    "MATCHES": "Matches",
+    "DISCOVER": "Descubrir",
+    "DISCOVER_DESC": "Comienza a deslizar y encuentra tu match",
+    "MESSAGES": "Mensajes",
+    "MESSAGES_DESC": "Chatea con tus matches",
+    "PROFILE": "Perfil",
+    "PROFILE_DESC": "Edita tu perfil y configuración",
+    "SIGN_OUT": "Cerrar Sesión"
+  },
+  
+  "MATCHING": {
+    "TITLE": "Descubrir",
+    "LOADING": "Cargando perfiles...",
+    "NO_MORE": "No Hay Más Perfiles",
+    "NO_MORE_DESC": "¡Vuelve más tarde para nuevos matches!",
+    "GO_BACK": "Volver",
+    "ITS_MATCH": "¡Es un Match!",
+    "MATCH_DESC": "Tú y {{name}} se gustaron mutuamente"
+  },
+  
+  "MATCHES": {
+    "TITLE": "Matches",
+    "LOADING": "Cargando matches...",
+    "NO_MATCHES": "Aún No Tienes Matches",
+    "NO_MATCHES_DESC": "¡Comienza a deslizar para encontrar tus matches!",
+    "START_SWIPING": "Comenzar a Deslizar",
+    "START_CONVERSATION": "¡Inicia una conversación!",
+    "AGO": {
+      "MINUTES": "Hace {{count}}m",
+      "HOURS": "Hace {{count}}h",
+      "DAYS": "Hace {{count}}d"
+    }
+  },
+  
+  "CHAT": {
+    "TITLE": "Chat",
+    "PLACEHOLDER": "Escribe un mensaje...",
+    "NO_MESSAGES": "¡Inicia tu conversación!",
+    "ERROR": {
+      "SEND": "Error al enviar mensaje",
+      "LOAD": "Error al cargar mensajes",
+      "NO_CHAT": "Error: No hay ID de chat"
+    }
+  },
+  
+  "PROFILE": {
+    "TITLE": "Perfil",
+    "WELCOME": "Bienvenido",
+    "PERSONAL_INFO": "Información Personal",
+    "UPDATE_INFO": "Actualiza tu información",
+    "LANGUAGE": "Idioma",
+    "UPDATE_BUTTON": "ACTUALIZAR PERFIL",
+    "GO_HOME": "IR A INICIO",
+    "STATISTICS": "Estadísticas",
+    "WALLPAPERS": "Fondos de Pantalla",
+    "LOADING": "Cargando...",
+    "UPDATING": "Actualizando perfil...",
+    "UPDATE_SUCCESS": "Perfil actualizado correctamente",
+    "UPDATE_ERROR": "Error al actualizar el perfil",
+    "PULL_TO_REFRESH": "Desliza para actualizar",
+    "REFRESHING": "Actualizando..."
+  },
+  
+  "COMMON": {
+    "LOADING": "Cargando...",
+    "ERROR": "Ocurrió un error",
+    "SUCCESS": "Éxito",
+    "CANCEL": "Cancelar",
+    "CONFIRM": "Confirmar",
+    "OK": "OK",
+    "YES": "Sí",
+    "NO": "No",
+    "SAVE": "Guardar",
+    "DELETE": "Eliminar",
+    "EDIT": "Editar",
+    "CLOSE": "Cerrar",
+    "BACK": "Atrás",
+    "NEXT": "Siguiente",
+    "FINISH": "Finalizar",
+    "RETRY": "Reintentar"
+  },
+  
+  "ERRORS": {
+    "NETWORK": "Error de red. Por favor verifica tu conexión.",
+    "AUTH": "Error de autenticación. Por favor inicia sesión nuevamente.",
+    "PERMISSION": "Permiso denegado. Por favor habilita los permisos en configuración.",
+    "UPLOAD": "Error al subir archivo",
+    "DOWNLOAD": "Error al descargar archivo",
+    "UNKNOWN": "Ocurrió un error desconocido"
+  }
 }

@@ -14,7 +14,6 @@ const routes: Routes = [
   {
     path: 'welcome',
     loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomePageModule)
-    
   },
   {
     path: 'login',
@@ -25,7 +24,6 @@ const routes: Routes = [
   {
     path: 'register',
     loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule),
-   
   },
   {
     path: 'home',
@@ -51,10 +49,20 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { authGuardPipe: isNotLogged },
   },
+  /*{
+    path: 'chat/:chatId', 
+    loadChildren: () => import('./pages/chat/chat.module').then(m => m.ChatPageModule),
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: isNotLogged },
+  },*/
   {
     path: '**',
     redirectTo: 'welcome',
     pathMatch: 'full'
+  },
+  {
+    path: 'chat',
+    loadChildren: () => import('./pages/chat/chat.module').then( m => m.ChatPageModule)
   }
 ];
 

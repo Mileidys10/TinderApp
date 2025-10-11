@@ -1,17 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 import { Loading } from 'src/app/core/providers/loading/loading';
 import { NativeToast } from 'src/app/core/providers/nativeToast/native-toast';
-import { Auth } from 'src/app/provide/auth/auth';
-import { Database } from 'src/app/services/database';
 import { User } from 'src/app/services/user/user';
-import { v4 as uuidv4 } from 'uuid';
-
-
-
-
+import { File } from 'src/app/provide/provide/file';
+import { Uploader } from 'src/app/core/providers/uploader/uploader';
 
 @Component({
   selector: 'app-register',
@@ -19,12 +13,6 @@ import { v4 as uuidv4 } from 'uuid';
   styleUrls: ['./register.page.scss'],
   standalone: false
 })
-
-
-
-
-
-
 export class RegisterPage implements OnInit {
   public name!: FormControl;
   public lastName!: FormControl;
@@ -51,11 +39,16 @@ export class RegisterPage implements OnInit {
     'Fashion', 'Technology', 'Food', 'Animals', 'Nature'
   ];
 
+  public uploadedPhotos: string[] = [];
+  public photoDataURIs: string[] = [];
+
   constructor(
     private router: Router,
     private loadingSrv: Loading,
     private userSrv: User,
-    private toast: NativeToast
+    private toast: NativeToast,
+    private fileSrv: File,
+    private uploaderSrv: Uploader
   ) {}
 
   ngOnInit() {
@@ -103,6 +96,50 @@ export class RegisterPage implements OnInit {
     return this.selectedPassions.includes(passion);
   }
 
+  async pickPhoto() {
+    if (this.uploadedPhotos.length >= 6) {
+      await this.toast.show('Maximum 6 photos allowed');
+      return;
+    }
+
+    try {
+      await this.loadingSrv.present({ msg: 'Uploading photo...' });
+      
+      const image = await this.fileSrv.pickImage();
+      
+      const fileName = `${Date.now()}_${this.email.value || 'user'}.jpg`;
+      
+      const path = await this.uploaderSrv.upload(
+        'profile-photos',
+        fileName,
+        image.mimeType,
+        image.data
+      );
+
+      if (path) {
+        const url = await this.uploaderSrv.getUrl('profile-photos', path);
+        this.uploadedPhotos.push(url);
+        
+        this.photoDataURIs.push(`data:${image.mimeType};base64,${image.data}`);
+        
+        await this.toast.show('Photo uploaded successfully!');
+      } else {
+        throw new Error('Failed to upload photo');
+      }
+      
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      await this.toast.show('Error uploading photo');
+    } finally {
+      await this.loadingSrv.dimiss();
+    }
+  }
+
+  removePhoto(index: number) {
+    this.uploadedPhotos.splice(index, 1);
+    this.photoDataURIs.splice(index, 1);
+  }
+
   public async doRegister() {
     if (this.registerForm.invalid) {
       await this.toast.show('Please fill all required fields');
@@ -114,17 +151,21 @@ export class RegisterPage implements OnInit {
       return;
     }
 
+    if (this.uploadedPhotos.length === 0) {
+      await this.toast.show('Please upload at least 1 photo');
+      return;
+    }
+
     await this.loadingSrv.present({ msg: 'Creating account...' });
 
     try {
       const formValue = this.registerForm.value;
       
-      
       const userData = {
         ...formValue,
         passions: this.selectedPassions.map(p => ({ category: p })),
         showGenderProfile: true,
-        photos: [] 
+        photos: this.uploadedPhotos 
       };
 
       await this.userSrv.create(userData);

@@ -29,31 +29,48 @@ export class TinderService {
   //  MATCHING 
   
   async getAvailableProfiles(): Promise<IPublicProfile[]> {
-    try {
-      const currentUid = this.authSrv.getCurrentUserUid();
-      if (!currentUid) return [];
+  try {
+    const currentUid = this.authSrv.getCurrentUserUid();
+    if (!currentUid) return [];
 
-      const likedUsers = await this.getLikedUserIds(currentUid);
+    const likedUsers = await this.getLikedUserIds(currentUid);
+    
+    const currentUserDoc = await getDoc(doc(this.firestore, 'users', currentUid));
+    const currentUser = currentUserDoc.data() as IPublicProfile;
+    
+    const usersRef = collection(this.firestore, 'users');
+    
+    const q = query(usersRef, limit(50)); 
+    
+    const snapshot = await getDocs(q);
+    const profiles: IPublicProfile[] = [];
+
+    snapshot.forEach(doc => {
+      const data = doc.data() as IPublicProfile;
       
-      const usersRef = collection(this.firestore, 'users');
-      const q = query(usersRef, limit(20)); 
-      
-      const snapshot = await getDocs(q);
-      const profiles: IPublicProfile[] = [];
+      if (data.uid !== currentUid && 
+          !likedUsers.includes(data.uid) &&
+          data.photos && 
+          data.photos.length > 0) { 
+        profiles.push(data);
+      }
+    });
 
-      snapshot.forEach(doc => {
-        const data = doc.data() as IPublicProfile;
-        if (data.uid !== currentUid && !likedUsers.includes(data.uid)) {
-          profiles.push(data);
-        }
-      });
-
-      return profiles;
-    } catch (error) {
-      console.error('Error getting profiles:', error);
-      return [];
-    }
+    return this.shuffleArray(profiles);
+  } catch (error) {
+    console.error('Error getting profiles:', error);
+    return [];
   }
+}
+
+private shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 
   
   async likeProfile(likedUserId: string): Promise<boolean> {
