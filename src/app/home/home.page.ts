@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '../services/user/user';
 import { NativeToast } from '../core/providers/nativeToast/native-toast';
@@ -10,10 +10,11 @@ import { TinderService } from '../services/tinder/tinder-service';
   styleUrls: ['home.page.scss'],
   standalone: false,
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
   public userName: string = '';
   public matchesCount: number = 0;
   public isLoading = false;
+  private matchesSubscription: any;
 
   constructor(
     private userSrv: User,
@@ -24,7 +25,13 @@ export class HomePage implements OnInit {
 
   async ngOnInit() {
     await this.loadUserData();
-    await this.loadMatchesCount();
+    this.subscribeToMatches();
+  }
+
+  ngOnDestroy() {
+    if (this.matchesSubscription) {
+      this.matchesSubscription();
+    }
   }
 
   private async loadUserData() {
@@ -38,7 +45,18 @@ export class HomePage implements OnInit {
     }
   }
 
-  private async loadMatchesCount() {
+  private subscribeToMatches() {
+    this.matchesSubscription = this.tinderSrv.subscribeToMatches((matches) => {
+      this.matchesCount = matches.length;
+    });
+  }
+
+  async ionViewWillEnter() {
+    // Refresh matches count when returning to this page
+    await this.refreshMatchesCount();
+  }
+
+  private async refreshMatchesCount() {
     try {
       const matches = await this.tinderSrv.getMatches();
       this.matchesCount = matches.length;
