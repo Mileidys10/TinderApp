@@ -1,0 +1,41 @@
+<ion-content class="welcome-content">
+  <div class="welcome-container">
+    <div class="logo-section">
+      <ion-icon name="flame" class="tinder-logo"></ion-icon>
+      <h1>Tinder</h1>
+      <p class="tagline">It's a Match!</p>
+    </div>
+
+    <div class="description">
+      <p>Swipe right to like someone</p>
+      <p>Swipe left to pass</p>
+    </div>
+
+    <div class="buttons-section">
+      <ion-button 
+        expand="block" 
+        color="danger" 
+        size="large"
+        (click)="goToRegister()">
+        CREATE ACCOUNT
+      </ion-button>
+
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        color="light" 
+        size="large"
+        (click)="goToLogin()">
+        SIGN IN
+      </ion-button>
+    </div>
+
+    <div class="terms">
+      <p>By tapping Create Account or Sign In, you agree to our 
+        <a href="#">Terms</a>. Learn how we process your data in our 
+        <a href="#">Privacy Policy</a> and 
+        <a href="#">Cookies Policy</a>.
+      </p>
+    </div>
+  </div>
+</ion-content>

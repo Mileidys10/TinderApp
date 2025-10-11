@@ -41,6 +41,10 @@ const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full'
   },
+  {
+    path: 'welcome',
+    loadChildren: () => import('./pages/welcome/welcome.module').then( m => m.WelcomePageModule)
+  },
   
 
 

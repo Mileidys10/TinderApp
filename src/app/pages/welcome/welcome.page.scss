@@ -1,0 +1,88 @@
+.welcome-content {
+  --background: linear-gradient(135deg, #fd5068 0%, #ff6b7f 100%);
+}
+
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  padding: 40px 30px;
+  color: white;
+}
+
+.logo-section {
+  text-align: center;
+  margin-top: 60px;
+
+  .tinder-logo {
+    font-size: 80px;
+    color: white;
+    animation: pulse 2s infinite;
+  }
+
+  h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin: 20px 0 10px;
+    letter-spacing: 2px;
+  }
+
+  .tagline {
+    font-size: 18px;
+    opacity: 0.9;
+  }
+}
+
+.description {
+  text-align: center;
+  margin: 40px 0;
+
+  p {
+    font-size: 16px;
+    margin: 8px 0;
+    opacity: 0.9;
+  }
+}
+
+.buttons-section {
+  margin: 20px 0;
+
+  ion-button {
+    margin: 10px 0;
+    height: 50px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &[color="danger"] {
+      --background: white;
+      --color: #fd5068;
+    }
+
+    &[fill="outline"] {
+      --border-color: white;
+      --color: white;
+    }
+  }
+}
+
+.terms {
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: auto;
+
+  a {
+    color: white;
+    text-decoration: underline;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
