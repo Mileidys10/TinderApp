@@ -62,50 +62,58 @@ export class MatchingPage implements OnInit {
   }
 
   onTouchMove(event: TouchEvent) {
-    if (!this.isDragging) return;
-    
-    this.currentX = event.touches[0].clientX;
-    const deltaX = this.currentX - this.startX;
-    
-    const card = this.profileCard.nativeElement;
-    const rotation = deltaX * 0.05; 
-    
-    card.style.transform = `translateX(${deltaX}px) rotate(${rotation}deg)`;
-    
-    if (deltaX > 50) {
-      card.classList.add('like-overlay');
-      card.classList.remove('nope-overlay');
-    } else if (deltaX < -50) {
-      card.classList.add('nope-overlay');
-      card.classList.remove('like-overlay');
-    } else {
-      card.classList.remove('like-overlay', 'nope-overlay');
-    }
+  if (!this.isDragging) return;
+  
+  this.currentX = event.touches[0].clientX;
+  const deltaX = this.currentX - this.startX;
+  
+  const card = this.profileCard.nativeElement;
+  const rotation = deltaX * 0.05;
+  
+  card.style.transition = 'none';
+  card.style.transform = `translateX(${deltaX}px) rotate(${rotation}deg)`;
+  
+  if (deltaX > 50) {
+    card.classList.add('like-overlay');
+    card.classList.remove('nope-overlay');
+  } else if (deltaX < -50) {
+    card.classList.add('nope-overlay');
+    card.classList.remove('like-overlay');
+  } else {
+    card.classList.remove('like-overlay', 'nope-overlay');
   }
+}
 
   onTouchEnd(event: TouchEvent) {
-    if (!this.isDragging) return;
-    
-    const deltaX = this.currentX - this.startX;
-    const card = this.profileCard.nativeElement;
-    
-    // Threshold para swipe
-    if (deltaX > 100) {
+  if (!this.isDragging) return;
+  
+  const deltaX = this.currentX - this.startX;
+  const card = this.profileCard.nativeElement;
+  
+  if (Math.abs(deltaX) > 100) {
+    if (deltaX > 0) {
       this.animateSwipe('right');
       this.onLike();
-    } else if (deltaX < -100) {
+    } else {
       this.animateSwipe('left');
       this.onPass();
-    } else {
-      card.style.transition = 'transform 0.3s ease';
-      card.style.transform = 'translateX(0) rotate(0)';
-      card.classList.remove('like-overlay', 'nope-overlay');
     }
+  } else {
+    card.style.transition = 'transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)';
+    card.style.transform = 'translateX(0) rotate(0)';
+    card.classList.remove('like-overlay', 'nope-overlay');
     
-    this.isDragging = false;
-    this.startX = 0;
-    this.currentX = 0;
+    setTimeout(() => {
+      card.style.transition = 'none';
+    }, 300);
   }
+  
+  this.isDragging = false;
+  this.startX = 0;
+  this.currentX = 0;
+}
+
+
 
   private animateSwipe(direction: 'left' | 'right') {
     const card = this.profileCard.nativeElement;

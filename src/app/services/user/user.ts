@@ -49,22 +49,23 @@ export class User {
   }
 
 
-  public async UpdateUser(data: Partial<ITinderUser>, value?: any) {
-    try {
-      const uuid = this.getCurrentuid();
-      if (!uuid) throw new Error('User not authenticated');
-      
-      if (data.birthDate) {
-        data.age = this.calculateAge(data.birthDate);
-      }
-
-      await this.querySrv.update('users', uuid, data);
-      return uuid;
-    } catch (error) {
-      console.error('Error updating user:', error);
-      throw error;
-    }
+ public async UpdateUser(name?: string, lastName?: string) {
+  try {
+    const uuid = this.getCurrentuid();
+    if (!uuid) throw new Error('User not authenticated');
+    
+    const updateData: any = {};
+    
+    if (name) updateData.name = name;
+    if (lastName) updateData.lastName = lastName;
+    
+    await this.querySrv.update('users', uuid, updateData);
+    return uuid;
+  } catch (error) {
+    console.error('Error updating user:', error);
+    throw error;
   }
+}
 
  
   public async addPhoto(photoUrl: string): Promise<void> {

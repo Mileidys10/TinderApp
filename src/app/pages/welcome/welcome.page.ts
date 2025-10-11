@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Auth } from 'src/app/provide/auth/auth';
 
 @Component({
   selector: 'app-welcome',
@@ -9,9 +10,16 @@ import { Router } from '@angular/router';
 })
 export class WelcomePage implements OnInit {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authSrv: Auth) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    const isLoggedIn = this.authSrv.getCurrentUserUid();
+    
+    if (isLoggedIn) {
+      this.router.navigate(['/home']);
+      return;
+    }
+    
     const hasSeenWelcome = localStorage.getItem('hasSeenWelcome');
     
     if (hasSeenWelcome) {

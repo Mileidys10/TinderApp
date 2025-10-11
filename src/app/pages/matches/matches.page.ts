@@ -34,22 +34,35 @@ export class MatchesPage implements OnInit {
       this.isLoading = true;
       const matchesData = await this.tinderSrv.getMatches();
       
-      this.matches = await Promise.all(
+      const results = await Promise.all(
         matchesData.map(async (match: IMatch) => { 
           const currentUid = this.tinderSrv['authSrv'].getCurrentUserUid();
-          const matchedUserId = match.participants.find((id: string) => id !== currentUid) || ''; // 👈 Tipo explícito
-          
+           if (!match.participants || !Array.isArray(match.participants)) {
+          console.warn('Match sin participants:', match);
+          return null;
+        }
+          const matchedUserId = match.participants.find((id: string) => id !== currentUid) ; 
+            if (!matchedUserId) {
+          console.warn('No se encontró matchedUserId:', match);
+          return null;
+        }
+
           const profile = await this.tinderSrv.getUserProfile(matchedUserId);
-          
+           if (!profile) {
+          console.warn('No se encontró perfil:', matchedUserId);
+          return null;
+        }
           return {
-            match,
-            profile: profile!,
+            match,  
+            profile,
             lastMessage: '',
             lastMessageTime: match.matchedAt
           };
         })
       );
       
+          this.matches = results.filter(m => m !== null) as IMatchWithProfile[];
+
       this.matches.sort((a, b) => 
         (b.lastMessageTime || 0) - (a.lastMessageTime || 0)
       );
