@@ -23,6 +23,7 @@ export interface IMatch {
   matchId: string;
   userId: string;
   matchedUserId: string;
+  participants: string[];
   matchedAt: number;
   chatId: string;
 }

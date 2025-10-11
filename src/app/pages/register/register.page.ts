@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { Loading } from 'src/app/core/providers/loading/loading';
+import { NativeToast } from 'src/app/core/providers/nativeToast/native-toast';
 import { Auth } from 'src/app/provide/auth/auth';
 import { Database } from 'src/app/services/database';
 import { User } from 'src/app/services/user/user';
@@ -29,43 +30,36 @@ export class RegisterPage implements OnInit {
   public lastName!: FormControl;
   public email!: FormControl;
   public password!: FormControl;
+  public birthDate!: FormControl;
+  public country!: FormControl;
+  public city!: FormControl;
+  public gender!: FormControl;
+  public bio!: FormControl;
   public registerForm!: FormGroup;
 
- /*registerForm!: FormGroup;
-    get name() { return this.registerForm.get('name') as FormControl; }
-  get lastName() { return this.registerForm.get('lastName') as FormControl; }
-  get email() { return this.registerForm.get('email') as FormControl; }
-  get password() { return this.registerForm.get('password') as FormControl; }
-*/
-  constructor( private router: Router,
-    private alertCtrl: AlertController,
-    private authService: Auth,
-    private database: Database,
-        private loadingSrv: Loading,
-            private userSrv: User,
+  public countries = ['Colombia', 'USA', 'Mexico', 'Argentina', 'Spain', 'Other'];
+  public genders = [
+    { value: 'male', label: 'Male' },
+    { value: 'female', label: 'Female' },
+    { value: 'other', label: 'Other' }
+  ];
 
+  public selectedPassions: string[] = [];
+  public availablePassions = [
+    'Travel', 'Music', 'Movies', 'Fitness', 'Reading', 
+    'Cooking', 'Photography', 'Gaming', 'Art', 'Sports',
+    'Fashion', 'Technology', 'Food', 'Animals', 'Nature'
+  ];
 
-
-
-
-) { }
-
-
-
+  constructor(
+    private router: Router,
+    private loadingSrv: Loading,
+    private userSrv: User,
+    private toast: NativeToast
+  ) {}
 
   ngOnInit() {
-
     this.initForm();
-
-  }
- public async doRegister() {
-    await this.loadingSrv.present({
-      msg: 'Please wait...'
-    });
-    await this.userSrv.create(this.registerForm.value);
-    this.registerForm.reset();
-    await this.loadingSrv.dimiss();
-    this.router.navigate(['/']);
   }
 
   public initForm() {
@@ -73,36 +67,77 @@ export class RegisterPage implements OnInit {
     this.lastName = new FormControl('', [Validators.required]);
     this.email = new FormControl('', [Validators.required, Validators.email]);
     this.password = new FormControl('', [Validators.required, Validators.minLength(8)]);
+    this.birthDate = new FormControl('', [Validators.required]);
+    this.country = new FormControl('Colombia', [Validators.required]);
+    this.city = new FormControl('', [Validators.required]);
+    this.gender = new FormControl('', [Validators.required]);
+    this.bio = new FormControl('');
+    
     this.registerForm = new FormGroup({
       name: this.name,
       lastName: this.lastName,
       email: this.email,
       password: this.password,
+      birthDate: this.birthDate,
+      country: this.country,
+      city: this.city,
+      gender: this.gender,
+      bio: this.bio
     });
   }
-   
-  /*  const { name, lastName, email, password } = this.registerForm.value;
 
-     try {
-      // Crea usuario en Firebase Auth
-      const uid = await this.authService.register(email, password);
-
-      //  Crea documento en Firestore
-      await this.database.addDocument({ uid, name, lastName, email }, 'users');
-
-      this.showAlert('Success', 'User registered successfully ✅');
-      this.router.navigate(['/login']);
-    } catch (err: any) {
-      this.showAlert('Registration failed', err.message || 'Error creating user');
+  togglePassion(passion: string) {
+    const index = this.selectedPassions.indexOf(passion);
+    if (index > -1) {
+      this.selectedPassions.splice(index, 1);
+    } else {
+      if (this.selectedPassions.length < 5) {
+        this.selectedPassions.push(passion);
+      } else {
+        this.toast.show('Maximum 5 passions allowed');
+      }
     }
   }
 
-  /*private async showAlert(header: string, message: string) {
-    const alert = await this.alertCtrl.create({
-      header,
-      message,
-      buttons: ['OK']
-    });
-    await alert.present();
-  }*/
+  isPassionSelected(passion: string): boolean {
+    return this.selectedPassions.includes(passion);
+  }
+
+  public async doRegister() {
+    if (this.registerForm.invalid) {
+      await this.toast.show('Please fill all required fields');
+      return;
+    }
+
+    if (this.selectedPassions.length < 3) {
+      await this.toast.show('Please select at least 3 passions');
+      return;
+    }
+
+    await this.loadingSrv.present({ msg: 'Creating account...' });
+
+    try {
+      const formValue = this.registerForm.value;
+      
+      
+      const userData = {
+        ...formValue,
+        passions: this.selectedPassions.map(p => ({ category: p })),
+        showGenderProfile: true,
+        photos: [] 
+      };
+
+      await this.userSrv.create(userData);
+      
+      await this.toast.show('Account created successfully!');
+      this.registerForm.reset();
+      this.router.navigate(['/login']);
+      
+    } catch (error) {
+      console.error('Error creating account:', error);
+      await this.toast.show('Error creating account. Please try again.');
+    } finally {
+      await this.loadingSrv.dimiss();
+    }
+  }
 }
