@@ -19,6 +19,7 @@ export class ProfilePage implements OnInit {
   public updaterForm!: FormGroup;
   public isLoading = false;
   public userData: any = null;
+  public userPhoto: string = '';
 
   constructor(
     private translateSrv: Translate,

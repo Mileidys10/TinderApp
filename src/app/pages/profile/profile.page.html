@@ -24,9 +24,10 @@
     </div>
 
     <div *ngIf="!isLoading" class="profile-form-container">
-      <div class="avatar-section">
+       <div class="avatar-section">
         <div class="avatar-placeholder">
-          <ion-icon name="person" size="large"></ion-icon>
+          <img *ngIf="userPhoto" [src]="userPhoto" alt="Profile photo">
+          <ion-icon *ngIf="!userPhoto" name="person" size="large"></ion-icon>
         </div>
         <h2 class="welcome-text">
           {{ 'PROFILE.WELCOME' | translate }}
