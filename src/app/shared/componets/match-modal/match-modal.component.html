@@ -1,0 +1,38 @@
+<div class="match-modal">
+  <div class="confetti"></div>
+  
+  <div class="match-content">
+    <ion-icon name="heart" class="heart-icon"></ion-icon>
+    
+    <h1 class="match-title">It's a Match!</h1>
+    
+    <p class="match-subtitle">
+      You and {{ matchedUserName }} liked each other
+    </p>
+    
+    <div class="match-avatar">
+      <img [src]="matchedUserPhoto || 'assets/placeholder.jpg'" 
+           [alt]="matchedUserName">
+    </div>
+    
+    <div class="action-buttons">
+      <ion-button 
+        expand="block" 
+        color="danger"
+        size="large"
+        (click)="sendMessage()">
+        <ion-icon name="chatbubbles" slot="start"></ion-icon>
+        SEND MESSAGE
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        fill="outline"
+        color="light"
+        size="large"
+        (click)="keepSwiping()">
+        KEEP SWIPING
+      </ion-button>
+    </div>
+  </div>
+</div>

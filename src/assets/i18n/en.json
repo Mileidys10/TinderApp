@@ -1,67 +1,147 @@
 {
-    "LOGIN": {
-        "EMAIL": "Email",
-        "PASSWORD": "Password",
-        "LINK": "Don't have an account?",
-        "BUTTON": "Log In"
-    },
-    "REGISTER": {
-        "NAME": "Name",
-        "LASTNAME": "Last name",
-        "EMAIL": "Email",
-        "PASSWORD": "Password",
-        "LINK": "Already registered?",
-        "BUTTON": "Register"
-    },
-    "HOME": {
-        "TITLE": "My Wallpapers",
-        "ACTIONS": "Actions",
-        "WALLPAPER_ACTIONS": "Wallpaper Options",
-        "SET_HOME_WALLPAPER": "Set as Home Screen",
-        "SET_LOCK_WALLPAPER": "Set as Lock Screen",
-        "SET_BOTH_WALLPAPER": "Set for Both Screens",
-        "CANCEL": "Cancel",
-        "NO_IMAGE_SELECTED": "No image selected",
-        "SETTING_WALLPAPER": "Setting wallpaper...",
-        "WALLPAPER_ERROR": "Error setting wallpaper",
-        "UPLOADING": "Uploading image...",
-        "IMAGE_UPLOADED": "Image uploaded successfully",
-        "ERROR_UPLOADING": "Error uploading image",
-        "DELETING": "Deleting...",
-        "IMAGE_DELETED": "Image deleted",
-        "ERROR_DELETING": "Error deleting image",
-        "LOGGING_OUT": "Logging out...",
-        "PULL_TO_REFRESH": "Pull to refresh",
-        "REFRESHING": "Refreshing...",
-        "LOADING_IMAGES": "Loading your wallpapers...",
-        "NO_IMAGES": "No wallpapers yet",
-        "NO_IMAGES_DESCRIPTION": "Tap the + button to add your first wallpaper",
-        "ADD_FIRST_WALLPAPER": "Add Your First Wallpaper"
-    },
-    "PROFILE": {
-        "TITLE": "My Profile",
-        "WELCOME": "Welcome",
-        "PERSONAL_INFO": "Personal Information",
-        "UPDATE_INFO": "Update your personal details",
-        "LANGUAGE": "Language",
-        "UPDATE_BUTTON": "Update Profile",
-        "GO_HOME": "Go to Home",
-        "STATISTICS": "Statistics",
-        "WALLPAPERS": "Wallpapers",
-        "LOADING": "Loading profile...",
-        "UPDATING": "Updating profile...",
-        "UPDATE_SUCCESS": "Profile updated successfully",
-        "UPDATE_ERROR": "Error updating profile",
-        "PULL_TO_REFRESH": "Pull to refresh",
-        "REFRESHING": "Refreshing..."
-    },
-    "WALLPAPER": {
-        "NOT_SUPPORTED_WEB": "Setting wallpaper is not supported in web browsers",
-        "PERMISSION_DENIED": "Permission denied to set wallpaper",
-        "SUCCESS": "Wallpaper set successfully",
-        "ERROR": "Error setting wallpaper",
-        "UNEXPECTED_ERROR": "An unexpected error occurred",
-        "IOS_HELP": "Image saved to Photos. Go to Settings > Wallpaper > Choose New Wallpaper > All Photos to set it manually.",
-        "ANDROID_HELP": "Wallpaper should be set automatically on Android devices."
+  "WELCOME": {
+    "TITLE": "Tinder",
+    "TAGLINE": "It's a Match!",
+    "DESCRIPTION_1": "Swipe right to like someone",
+    "DESCRIPTION_2": "Swipe left to pass",
+    "CREATE_ACCOUNT": "CREATE ACCOUNT",
+    "SIGN_IN": "SIGN IN",
+    "TERMS": "By tapping Create Account or Sign In, you agree to our Terms"
+  },
+  
+  "LOGIN": {
+    "TITLE": "Welcome Back!",
+    "SUBTITLE": "Sign in to continue",
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "BUTTON": "SIGN IN",
+    "LINK": "Don't have an account? Register",
+    "ERROR": {
+      "INVALID": "Invalid email or password",
+      "REQUIRED": "Please fill all fields"
     }
+  },
+  
+  "REGISTER": {
+    "TITLE": "Create Account",
+    "SUBTITLE": "Find your perfect match",
+    "NAME": "First Name",
+    "LASTNAME": "Last Name",
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "BIRTHDATE": "Birth Date",
+    "COUNTRY": "Country",
+    "CITY": "City",
+    "GENDER": "Gender",
+    "BIO": "Bio (Optional)",
+    "PHOTOS": "Add Photos (1-6 required)",
+    "PHOTOS_COUNT": "{{count}} / 6 photos",
+    "PASSIONS": "Select Your Passions (3-5)",
+    "PASSIONS_COUNT": "{{count}} / 5 selected",
+    "BUTTON": "CREATE ACCOUNT",
+    "LINK": "Already have an account? Sign in",
+    "ERROR": {
+      "FILL_FIELDS": "Please fill all required fields",
+      "MIN_PASSIONS": "Please select at least 3 passions",
+      "MIN_PHOTOS": "Please upload at least 1 photo",
+      "MAX_PHOTOS": "Maximum 6 photos allowed",
+      "MAX_PASSIONS": "Maximum 5 passions allowed"
+    },
+    "SUCCESS": "Account created successfully!"
+  },
+  
+  "HOME": {
+    "TITLE": "tinder",
+    "WELCOME": "Welcome back, {{name}}!",
+    "SUBTITLE": "Ready to find your match?",
+    "MATCHES": "Matches",
+    "DISCOVER": "Discover",
+    "DISCOVER_DESC": "Start swiping and find your match",
+    "MESSAGES": "Messages",
+    "MESSAGES_DESC": "Chat with your matches",
+    "PROFILE": "Profile",
+    "PROFILE_DESC": "Edit your profile and settings",
+    "SIGN_OUT": "Sign Out"
+  },
+  
+  "MATCHING": {
+    "TITLE": "Discover",
+    "LOADING": "Loading profiles...",
+    "NO_MORE": "No More Profiles",
+    "NO_MORE_DESC": "Check back later for new matches!",
+    "GO_BACK": "Go Back",
+    "ITS_MATCH": "It's a Match!",
+    "MATCH_DESC": "You and {{name}} liked each other"
+  },
+  
+  "MATCHES": {
+    "TITLE": "Matches",
+    "LOADING": "Loading matches...",
+    "NO_MATCHES": "No Matches Yet",
+    "NO_MATCHES_DESC": "Start swiping to find your matches!",
+    "START_SWIPING": "Start Swiping",
+    "START_CONVERSATION": "Start a conversation!",
+    "AGO": {
+      "MINUTES": "{{count}}m ago",
+      "HOURS": "{{count}}h ago",
+      "DAYS": "{{count}}d ago"
+    }
+  },
+  
+  "CHAT": {
+    "TITLE": "Chat",
+    "PLACEHOLDER": "Type a message...",
+    "NO_MESSAGES": "Start your conversation!",
+    "ERROR": {
+      "SEND": "Error sending message",
+      "LOAD": "Error loading messages",
+      "NO_CHAT": "Error: No chat ID"
+    }
+  },
+  
+  "PROFILE": {
+    "TITLE": "Profile",
+    "WELCOME": "Welcome",
+    "PERSONAL_INFO": "Personal Information",
+    "UPDATE_INFO": "Update your information",
+    "LANGUAGE": "Language",
+    "UPDATE_BUTTON": "UPDATE PROFILE",
+    "GO_HOME": "GO TO HOME",
+    "STATISTICS": "Statistics",
+    "WALLPAPERS": "Wallpapers",
+    "LOADING": "Loading...",
+    "UPDATING": "Updating profile...",
+    "UPDATE_SUCCESS": "Profile updated successfully",
+    "UPDATE_ERROR": "Error updating profile",
+    "PULL_TO_REFRESH": "Pull to refresh",
+    "REFRESHING": "Refreshing..."
+  },
+  
+  "COMMON": {
+    "LOADING": "Loading...",
+    "ERROR": "An error occurred",
+    "SUCCESS": "Success",
+    "CANCEL": "Cancel",
+    "CONFIRM": "Confirm",
+    "OK": "OK",
+    "YES": "Yes",
+    "NO": "No",
+    "SAVE": "Save",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "CLOSE": "Close",
+    "BACK": "Back",
+    "NEXT": "Next",
+    "FINISH": "Finish",
+    "RETRY": "Retry"
+  },
+  
+  "ERRORS": {
+    "NETWORK": "Network error. Please check your connection.",
+    "AUTH": "Authentication error. Please login again.",
+    "PERMISSION": "Permission denied. Please enable permissions in settings.",
+    "UPLOAD": "Error uploading file",
+    "DOWNLOAD": "Error downloading file",
+    "UNKNOWN": "An unknown error occurred"
+  }
 }

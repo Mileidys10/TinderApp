@@ -111,6 +111,39 @@
             </ion-col>
           </ion-row>
 
+          <!--  Seccion de Fotos -->
+          <ion-row>
+            <ion-col>
+              <div class="photos-section">
+                <h3>Add Photos (1-6 required)</h3>
+                <p class="photos-count">{{ uploadedPhotos.length }} / 6 photos</p>
+                
+                <div class="photos-grid">
+                  <div 
+                    *ngFor="let photo of photoDataURIs; let i = index" 
+                    class="photo-item">
+                    <img [src]="photo" alt="Photo {{ i + 1 }}">
+                    <ion-button 
+                      fill="clear" 
+                      color="danger"
+                      class="remove-btn"
+                      (click)="removePhoto(i)">
+                      <ion-icon name="close-circle"></ion-icon>
+                    </ion-button>
+                  </div>
+
+                  <div 
+                    *ngIf="uploadedPhotos.length < 6"
+                    class="photo-placeholder"
+                    (click)="pickPhoto()">
+                    <ion-icon name="add-circle-outline"></ion-icon>
+                    <span>Add Photo</span>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+
           <!-- Passions -->
           <ion-row>
             <ion-col>
@@ -145,7 +178,7 @@
               <app-button 
                 type="submit" 
                 color="danger" 
-                [disabled]="registerForm.invalid || selectedPassions.length < 3" 
+                [disabled]="registerForm.invalid || selectedPassions.length < 3 || uploadedPhotos.length === 0" 
                 value="CREATE ACCOUNT">
               </app-button>
             </ion-col>

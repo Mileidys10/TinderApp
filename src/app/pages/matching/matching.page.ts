@@ -4,6 +4,9 @@ import { NativeToast } from 'src/app/core/providers/nativeToast/native-toast';
 import { Translate } from 'src/app/core/providers/translator/translate';
 import { IPublicProfile } from 'src/app/interfaces/tinder-user';
 import { TinderService } from 'src/app/services/tinder/tinder-service';
+import { ModalController } from '@ionic/angular';
+import { MatchModalComponent } from 'src/app/shared/componets/match-modal/match-modal.component';
+
 
 @Component({
   selector: 'app-matching',
@@ -27,7 +30,8 @@ export class MatchingPage implements OnInit {
     private tinderSrv: TinderService,
     private router: Router,
     private toast: NativeToast,
-    private translateSrv: Translate
+    private translateSrv: Translate,
+    private modalController: ModalController
   ) {}
 
   async ngOnInit() {
@@ -137,12 +141,45 @@ export class MatchingPage implements OnInit {
     const isMatch = await this.tinderSrv.likeProfile(this.currentProfile.uid);
     
     if (isMatch) {
-      await this.toast.show('¡Es un Match! 💕');
+      const matches = await this.tinderSrv.getMatches();
+      const currentMatch = matches.find(m => 
+        m.participants.includes(this.currentProfile!.uid)
+      );
       
+      if (currentMatch) {
+        await this.showMatchModal(currentMatch.chatId);
+      }
     }
     
     this.nextProfile();
   }
+  
+  
+    async showMatchModal(chatId: string) {
+    const modal = await this.modalController.create({
+      component: MatchModalComponent,
+      cssClass: 'match-modal-class',
+      componentProps: {
+        matchedUserName: this.currentProfile?.name,
+        matchedUserPhoto: this.currentProfile?.photos[0],
+        chatId: chatId,
+        matchedUserId: this.currentProfile?.uid
+      }
+    });
+    
+    await modal.present();
+  }
+
+
+
+
+
+
+
+
+
+
+
 
   async onPass() {
     if (!this.currentProfile) return;

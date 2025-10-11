@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>
+      <div class="header-profile">
+        <ion-avatar>
+          <img [src]="matchedUserPhoto || 'assets/placeholder.jpg'" 
+               [alt]="matchedUserName">
+        </ion-avatar>
+        <span>{{ matchedUserName }}</span>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="chat-content">
+  <div #messageContainer class="messages-container">
+    <div *ngIf="messages.length === 0" class="no-messages">
+      <ion-icon name="chatbubbles-outline" size="large"></ion-icon>
+      <p>Start your conversation!</p>
+    </div>
+
+    <div *ngFor="let message of messages" 
+         [class]="isMyMessage(message) ? 'message-wrapper my-message' : 'message-wrapper their-message'">
+      
+      <div *ngIf="!isMyMessage(message)" class="avatar-small">
+        <ion-avatar>
+          <img [src]="matchedUserPhoto || 'assets/placeholder.jpg'" 
+               [alt]="matchedUserName">
+        </ion-avatar>
+      </div>
+
+      <div class="message-bubble">
+        <p>{{ message.message }}</p>
+        <span class="time">{{ formatTime(message.timestamp) }}</span>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-item lines="none" class="message-input">
+      <ion-input
+        [(ngModel)]="newMessage"
+        placeholder="Type a message..."
+        (keyup.enter)="sendMessage()"
+        type="text">
+      </ion-input>
+      <ion-button 
+        slot="end" 
+        fill="clear" 
+        color="danger"
+        (click)="sendMessage()"
+        [disabled]="!newMessage.trim()">
+        <ion-icon name="send" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>
