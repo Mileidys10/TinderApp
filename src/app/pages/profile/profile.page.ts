@@ -44,6 +44,10 @@ export class ProfilePage implements OnInit {
       if (this.userData) {
         this.name.setValue(this.userData.name || '');
         this.lastName.setValue(this.userData.lastName || '');
+        
+        if (this.userData.photos && this.userData.photos.length > 0) {
+          this.userPhoto = this.userData.photos[0];
+        }
       }
     } catch (error) {
       console.error('Error loading user data:', error);

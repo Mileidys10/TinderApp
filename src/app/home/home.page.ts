@@ -14,6 +14,7 @@ export class HomePage implements OnInit, OnDestroy {
   public userName: string = '';
   public matchesCount: number = 0;
   public isLoading = false;
+  public userPhoto: string = ''; 
   private matchesSubscription: any;
 
   constructor(
@@ -39,6 +40,10 @@ export class HomePage implements OnInit, OnDestroy {
       const userData = await this.userSrv.getUserData();
       if (userData) {
         this.userName = userData.name;
+        
+        if (userData.photos && userData.photos.length > 0) {
+          this.userPhoto = userData.photos[0];
+        }
       }
     } catch (error) {
       console.error('Error loading user data:', error);
@@ -52,7 +57,6 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async ionViewWillEnter() {
-    // Refresh matches count when returning to this page
     await this.refreshMatchesCount();
   }
 
