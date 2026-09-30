@@ -1,14 +1,16 @@
 {
-  "name": "wallpaperapp",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "name": "tinderapp",
+  "version": "2.0.0",
+  "author": "Mileidys Agamez Ospino",
+  "homepage": "https://github.com/Mileidys10/TinderApp",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:qa": "python tests/test_tinderapp.py",
+    "serve:demo": "python serve_demo.py",
     "lint": "ng lint"
   },
   "private": true,
@@ -76,5 +78,5 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.8.0"
   },
-  "description": "An Ionic project"
+  "description": "TinderApp Mobile - Aplicación Móvil Reactiva de Citas y Networking con Ionic 8, Angular 20, Capacitor 7 y Supabase"
 }

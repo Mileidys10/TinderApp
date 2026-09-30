@@ -79,10 +79,40 @@ export class MatchingPage implements OnInit {
 
   onTouchMove(event: TouchEvent) {
     if (!this.isDragging) return;
-    
     this.currentX = event.touches[0].clientX;
     const deltaX = this.currentX - this.startX;
-    
+    this.updateCardPosition(deltaX);
+  }
+
+  onTouchEnd(event: TouchEvent) {
+    if (!this.isDragging) return;
+    this.finishDrag();
+  }
+
+  onMouseDown(event: MouseEvent) {
+    this.startX = event.clientX;
+    this.isDragging = true;
+  }
+
+  onMouseMove(event: MouseEvent) {
+    if (!this.isDragging) return;
+    this.currentX = event.clientX;
+    const deltaX = this.currentX - this.startX;
+    this.updateCardPosition(deltaX);
+  }
+
+  onMouseUp(event: MouseEvent) {
+    if (!this.isDragging) return;
+    this.finishDrag();
+  }
+
+  onMouseLeave(event: MouseEvent) {
+    if (!this.isDragging) return;
+    this.finishDrag();
+  }
+
+  private updateCardPosition(deltaX: number) {
+    if (!this.profileCard?.nativeElement) return;
     const card = this.profileCard.nativeElement;
     const rotation = deltaX * 0.05;
     
@@ -100,11 +130,9 @@ export class MatchingPage implements OnInit {
     }
   }
 
-  onTouchEnd(event: TouchEvent) {
-    if (!this.isDragging) return;
-    
+  private finishDrag() {
     const deltaX = this.currentX - this.startX;
-    const card = this.profileCard.nativeElement;
+    const card = this.profileCard?.nativeElement;
     
     if (Math.abs(deltaX) > 100) {
       if (deltaX > 0) {
@@ -114,14 +142,14 @@ export class MatchingPage implements OnInit {
         this.animateSwipe('left');
         this.onPass();
       }
-    } else {
-      card.style.transition = 'transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)';
+    } else if (card) {
+      card.style.transition = 'transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
       card.style.transform = 'translateX(0) rotate(0)';
       card.classList.remove('like-overlay', 'nope-overlay');
       
       setTimeout(() => {
-        card.style.transition = 'none';
-      }, 300);
+        if (card) card.style.transition = 'none';
+      }, 350);
     }
     
     this.isDragging = false;

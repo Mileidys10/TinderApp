@@ -38,7 +38,11 @@
          class="profile-card"
          (touchstart)="onTouchStart($event)"
          (touchmove)="onTouchMove($event)"
-         (touchend)="onTouchEnd($event)">
+         (touchend)="onTouchEnd($event)"
+         (mousedown)="onMouseDown($event)"
+         (mousemove)="onMouseMove($event)"
+         (mouseup)="onMouseUp($event)"
+         (mouseleave)="onMouseLeave($event)">
       
       <img [src]="currentProfile.photos[0] || 'assets/placeholder.jpg'" 
            alt="Profile" 

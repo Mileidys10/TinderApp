@@ -68,3 +68,14 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Governance & Agentic files (Privado - No subir a GitHub)
+AGENTS.md
+.env
+.env.*
+*.local
+
+# Python Test & Cache
+__pycache__/
+*.py[cod]
+.pytest_cache/

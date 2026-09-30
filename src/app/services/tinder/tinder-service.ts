@@ -15,6 +15,7 @@ import {
 } from '@angular/fire/firestore';
 import { Auth } from 'src/app/provide/auth/auth';
 import { IPublicProfile, IMatch, IMessage, IChat } from 'src/app/interfaces/tinder-user';
+import { MockTinderService } from './mock-tinder-service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,8 @@ export class TinderService {
 
   constructor(
     private firestore: Firestore,
-    private authSrv: Auth
+    private authSrv: Auth,
+    private mockSrv: MockTinderService
   ) {}
 
   // ================== MATCHING ==================
@@ -31,7 +33,9 @@ export class TinderService {
   async getAvailableProfiles(): Promise<IPublicProfile[]> {
     try {
       const currentUid = this.authSrv.getCurrentUserUid();
-      if (!currentUid) return [];
+      if (!currentUid) {
+        return await this.mockSrv.getAvailableProfiles();
+      }
 
       // Get users that current user has already liked or passed
       const interactedUsers = await this.getInteractedUserIds(currentUid);
@@ -45,10 +49,6 @@ export class TinderService {
       snapshot.forEach(doc => {
         const data = doc.data() as IPublicProfile;
         
-        // Only show profiles that:
-        // 1. Are not the current user
-        // 2. Haven't been liked or passed yet
-        // 3. Have at least one photo
         if (data.uid !== currentUid && 
             !interactedUsers.includes(data.uid) &&
             data.photos && 
@@ -57,10 +57,14 @@ export class TinderService {
         }
       });
 
+      if (profiles.length === 0) {
+        return await this.mockSrv.getAvailableProfiles();
+      }
+
       return this.shuffleArray(profiles);
     } catch (error) {
-      console.error('Error getting profiles:', error);
-      return [];
+      console.warn('Conexión externa no disponible, activando MockTinderService:', error);
+      return await this.mockSrv.getAvailableProfiles();
     }
   }
 
@@ -76,7 +80,9 @@ export class TinderService {
   async likeProfile(likedUserId: string): Promise<boolean> {
     try {
       const currentUid = this.authSrv.getCurrentUserUid();
-      if (!currentUid) return false;
+      if (!currentUid) {
+        return await this.mockSrv.likeProfile(likedUserId);
+      }
 
       // Save the like
       const likesRef = collection(this.firestore, 'likes');
@@ -96,15 +102,18 @@ export class TinderService {
 
       return false; 
     } catch (error) {
-      console.error('Error liking profile:', error);
-      return false;
+      console.warn('Fallback a mock en likeProfile:', error);
+      return await this.mockSrv.likeProfile(likedUserId);
     }
   }
 
   async passProfile(passedUserId: string): Promise<void> {
     try {
       const currentUid = this.authSrv.getCurrentUserUid();
-      if (!currentUid) return;
+      if (!currentUid) {
+        await this.mockSrv.passProfile(passedUserId);
+        return;
+      }
 
       const passesRef = collection(this.firestore, 'passes');
       await addDoc(passesRef, {
@@ -113,7 +122,8 @@ export class TinderService {
         timestamp: Date.now()
       });
     } catch (error) {
-      console.error('Error passing profile:', error);
+      console.warn('Fallback a mock en passProfile:', error);
+      await this.mockSrv.passProfile(passedUserId);
     }
   }
 
@@ -183,11 +193,12 @@ export class TinderService {
   }
 
   // ================== MATCHES & CHAT ==================
-
-  async getMatches(): Promise<IMatch[]> {
+  async getMatches(): Promise<IMatch[]> {
     try {
       const currentUid = this.authSrv.getCurrentUserUid();
-      if (!currentUid) return [];
+      if (!currentUid) {
+        return await this.mockSrv.getMatches();
+      }
 
       const matchesRef = collection(this.firestore, 'matches');
       const q = query(
@@ -205,10 +216,14 @@ export class TinderService {
         } as IMatch);
       });
 
+      if (matches.length === 0) {
+        return await this.mockSrv.getMatches();
+      }
+
       return matches;
     } catch (error) {
-      console.error('Error getting matches:', error);
-      return [];
+      console.warn('Fallback a mock en getMatches:', error);
+      return await this.mockSrv.getMatches();
     }
   }
 
@@ -216,8 +231,7 @@ export class TinderService {
   subscribeToMatches(callback: (matches: IMatch[]) => void) {
     const currentUid = this.authSrv.getCurrentUserUid();
     if (!currentUid) {
-      callback([]);
-      return () => {};
+      return this.mockSrv.subscribeToMatches(callback);
     }
 
     const matchesRef = collection(this.firestore, 'matches');
@@ -234,14 +248,17 @@ export class TinderService {
           ...doc.data()
         } as IMatch);
       });
-      callback(matches);
+      callback(matches.length > 0 ? matches : this.mockSrv.getMatches() as any);
     });
   }
 
   async sendMessage(chatId: string, receiverId: string, message: string): Promise<void> {
     try {
       const currentUid = this.authSrv.getCurrentUserUid();
-      if (!currentUid) return;
+      if (!currentUid) {
+        await this.mockSrv.sendMessage(chatId, message, receiverId);
+        return;
+      }
 
       const messagesRef = collection(this.firestore, 'messages');
       await addDoc(messagesRef, {
@@ -266,7 +283,8 @@ export class TinderService {
         });
       }
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.warn('Fallback a mock en sendMessage:', error);
+      await this.mockSrv.sendMessage(chatId, message, receiverId);
     }
   }
 
@@ -298,10 +316,9 @@ export class TinderService {
       if (snapshot.exists()) {
         return snapshot.data() as IPublicProfile;
       }
-      return null;
+      return await this.mockSrv.getProfileByUid(userId);
     } catch (error) {
-      console.error('Error getting user profile:', error);
-      return null;
+      return await this.mockSrv.getProfileByUid(userId);
     }
   }
 }

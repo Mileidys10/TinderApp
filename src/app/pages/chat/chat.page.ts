@@ -35,7 +35,8 @@ export class ChatPage implements OnInit, OnDestroy {
     this.matchedUserName = this.route.snapshot.queryParamMap.get('matchedUserName') || '';
     this.matchedUserPhoto = this.route.snapshot.queryParamMap.get('matchedUserPhoto') || '';
 
-    this.currentUserId = this.tinderSrv['authSrv'].getCurrentUserUid() || '';
+    const authUid = this.tinderSrv['authSrv']?.getCurrentUserUid();
+    this.currentUserId = authUid || 'current-user-demo';
 
     if (!this.chatId) {
       await this.toast.show('Error: No chat ID');
@@ -80,7 +81,7 @@ export class ChatPage implements OnInit, OnDestroy {
   }
 
   isMyMessage(message: IMessage): boolean {
-    return message.senderId === this.currentUserId;
+    return message.senderId === this.currentUserId || message.senderId === 'current-user-demo';
   }
 
   formatTime(timestamp: number): string {

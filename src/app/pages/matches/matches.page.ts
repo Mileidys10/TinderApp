@@ -36,8 +36,8 @@ export class MatchesPage implements OnInit {
       
       const results = await Promise.all(
         matchesData.map(async (match: IMatch) => { 
-          const currentUid = this.tinderSrv['authSrv'].getCurrentUserUid();
-           if (!match.participants || !Array.isArray(match.participants)) {
+          const currentUid = this.tinderSrv['authSrv']?.getCurrentUserUid() || 'current-user-demo';
+          if (!match.participants || !Array.isArray(match.participants)) {
           console.warn('Match sin participants:', match);
           return null;
         }
