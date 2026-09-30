@@ -3,36 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TinderApp Mobile &mdash; Simulador Interactivo de Portafolio</title>
-  <meta name="description" content="Simulador interactivo de TinderApp Mobile desarrollado con Ionic 8, Angular 20, Capacitor 7 y Mock Engine de alta fidelidad.">
+  <title>TinderApp Mobile â€” Experiencia Completa de Portafolio</title>
+  <meta name="description" content="TinderApp Mobile desarrollada con Ionic 8, Angular 20 y Capacitor 7. Experiencia completa: Registro, Login, Swipe Deck con fÃ­sica dual, Matches, Chat y Perfil.">
   <meta name="author" content="Mileidys Agamez Ospino">
 
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸ”¥</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --primary: #fd5068;
-      --primary-gradient: linear-gradient(135deg, #fd5068 0%, #ff6036 100%);
-      --superlike: #2db1ff;
-      --like: #10b981;
-      --pass: #ef4444;
-      --boost: #a855f7;
-      --bg-dark: #0f1115;
-      --bg-phone: #181a20;
-      --bg-card: #22252d;
+      /* Paleta AutÃ©ntica Tinder Flame & Modern Velvet Dark */
+      --flame-coral: #fd3a73;
+      --flame-orange: #ff6036;
+      --flame-gradient: linear-gradient(135deg, #fd3a73 0%, #ff6036 100%);
+      --flame-glow: rgba(253, 58, 115, 0.28);
+
+      --bg-simulator: #0a0c10;
+      --bg-phone: #12151c;
+      --bg-card: #1a1e28;
+      --bg-surface: #222734;
+      --bg-input: rgba(255, 255, 255, 0.05);
+
       --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border-subtle: rgba(255, 255, 255, 0.1);
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(253, 58, 115, 0.5);
+
+      /* Acciones de Tarjeta */
+      --color-like: #10b981;
+      --color-pass: #ef4444;
+      --color-superlike: #0284c7;
+      --color-boost: #a855f7;
+      --color-rewind: #f59e0b;
+
       --font-heading: 'Outfit', sans-serif;
       --font-body: 'Plus Jakarta Sans', sans-serif;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
     body {
-      background: var(--bg-dark);
+      background: var(--bg-simulator);
       color: var(--text-main);
       font-family: var(--font-body);
       min-height: 100vh;
@@ -40,18 +55,19 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
       overflow-x: hidden;
     }
 
+    /* Marco de Smartphone (iPhone 16 Pro Style) */
     .phone-simulator {
       width: 100%;
-      max-width: 412px;
-      height: 840px;
+      max-width: 416px;
+      height: 854px;
       background: var(--bg-phone);
-      border-radius: 46px;
-      border: 10px solid #2b2f3a;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(253, 80, 104, 0.18);
+      border-radius: 48px;
+      border: 9px solid #282d3b;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 45px rgba(253, 58, 115, 0.15);
       position: relative;
       display: flex;
       flex-direction: column;
@@ -59,82 +75,51 @@
       user-select: none;
     }
 
-    /* Notch & Status Bar */
-    .phone-notch {
-      width: 130px;
-      height: 24px;
-      background: #2b2f3a;
-      border-radius: 0 0 16px 16px;
+    /* Dynamic Island */
+    .phone-dynamic-island {
+      width: 120px;
+      height: 28px;
+      background: #000000;
+      border-radius: 20px;
       position: absolute;
-      top: 0;
+      top: 10px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 100;
-    }
-
-    .status-bar {
-      height: 38px;
-      padding: 8px 24px 0;
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #94a3b8;
-      z-index: 90;
-    }
-
-    /* App Header */
-    .app-header {
-      height: 54px;
+      z-index: 120;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
-      border-bottom: 1px solid var(--border-subtle);
-      z-index: 80;
+      padding: 0 10px;
     }
 
-    .brand-flame {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--font-heading);
-      font-weight: 900;
-      font-size: 1.35rem;
-      background: var(--primary-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      cursor: pointer;
+    .island-cam {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #111827;
+      border: 1px solid #1f2937;
     }
 
-    .header-nav-btn {
-      background: transparent;
-      border: none;
-      font-size: 1.4rem;
-      cursor: pointer;
-      color: var(--text-muted);
-      position: relative;
-      padding: 6px;
-      transition: color 0.2s;
-    }
-
-    .header-nav-btn.active, .header-nav-btn:hover {
-      color: #fd5068;
-    }
-
-    .badge-dot {
+    .island-sensor {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #fd5068;
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      box-shadow: 0 0 6px #fd5068;
+      background: #09090b;
     }
 
-    /* Views Container */
-    .app-viewport {
+    .phone-status-bar {
+      height: 44px;
+      padding: 12px 26px 0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #94a3b8;
+      z-index: 110;
+    }
+
+    /* Contenedor Principal de Pantallas */
+    .viewport {
       flex: 1;
       position: relative;
       overflow: hidden;
@@ -142,704 +127,1581 @@
       flex-direction: column;
     }
 
-    .view-screen {
+    .app-screen {
       position: absolute;
       inset: 0;
       display: none;
       flex-direction: column;
-      padding: 14px 16px 20px;
+      background: var(--bg-phone);
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
-    .view-screen.active {
+    .app-screen.active {
       display: flex;
+      animation: screenFadeIn 0.24s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Deck View (Matching) */
-    .deck-container {
+    @keyframes screenFadeIn {
+      from { opacity: 0; transform: scale(0.985); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* 1. WELCOME */
+    .screen-welcome {
+      padding: 40px 24px 30px;
+      justify-content: space-between;
+      text-align: center;
+      background: radial-gradient(circle at 50% 30%, rgba(253, 58, 115, 0.18), transparent 70%), var(--bg-phone);
+    }
+
+    .welcome-hero {
+      margin-top: 50px;
+    }
+
+    .welcome-flame-icon {
+      font-size: 5rem;
+      display: inline-block;
+      filter: drop-shadow(0 8px 24px rgba(253, 58, 115, 0.5));
+      animation: flameFloat 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes flameFloat {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-8px) scale(1.05); }
+    }
+
+    .welcome-title {
+      font-family: var(--font-heading);
+      font-size: 3rem;
+      font-weight: 900;
+      background: var(--flame-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 4px;
+      letter-spacing: -0.04em;
+    }
+
+    .welcome-tagline {
+      font-size: 1.05rem;
+      color: #cbd5e1;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .welcome-feature-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .welcome-pill {
+      font-size: 0.75rem;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: #94a3b8;
+    }
+
+    .welcome-actions-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    .btn-flame-main {
+      background: var(--flame-gradient);
+      color: #ffffff;
+      border: none;
+      padding: 15px 24px;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      box-shadow: 0 8px 24px var(--flame-glow);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-flame-main:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(253, 58, 115, 0.45);
+    }
+
+    .btn-outline-white {
+      background: transparent;
+      color: #ffffff;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      padding: 13px 24px;
+      border-radius: 9999px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-outline-white:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: #ffffff;
+    }
+
+    .btn-ghost-demo {
+      background: rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 11px 20px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-ghost-demo:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .terms-disclaimer {
+      font-size: 0.72rem;
+      color: #64748b;
+      line-height: 1.45;
+      margin-top: 14px;
+    }
+
+    /* 2. REGISTER & 3. LOGIN */
+    .screen-header-bar {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-phone);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .btn-header-back {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 1.3rem;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 8px;
+    }
+
+    .screen-header-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #ffffff;
+    }
+
+    .register-body-form {
+      padding: 20px 20px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .form-input-control {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #ffffff;
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-input-control:focus {
+      border-color: var(--flame-coral);
+      box-shadow: 0 0 0 3px rgba(253, 58, 115, 0.18);
+    }
+
+    .form-row-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Grilla de Fotos */
+    .photos-picker-container {
+      margin-top: 4px;
+    }
+
+    .photos-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .photos-grid-6 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .photo-slot {
+      aspect-ratio: 1;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1.5px dashed rgba(255, 255, 255, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .photo-slot:hover {
+      border-color: var(--flame-coral);
+      background: rgba(253, 58, 115, 0.05);
+    }
+
+    .photo-slot.has-image {
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .photo-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .slot-remove-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      color: #fff;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Pasiones */
+    .passions-chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .passion-chip-item {
+      padding: 7px 14px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .passion-chip-item.selected {
+      background: rgba(253, 58, 115, 0.18);
+      border-color: var(--flame-coral);
+      color: #ff6b8b;
+      transform: scale(1.03);
+    }
+
+    /* LOGIN */
+    .login-body-form {
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .password-input-wrap {
+      position: relative;
+    }
+
+    .password-toggle-eye {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .lang-switcher-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* 4. DECK DE MATCHING */
+    .deck-screen-layout {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 16px 8px;
+      position: relative;
+    }
+
+    .deck-container-area {
       flex: 1;
       position: relative;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       perspective: 1000px;
     }
 
-    .tinder-card {
+    .tinder-card-modern {
       position: absolute;
       inset: 0;
-      border-radius: 24px;
+      border-radius: 26px;
       background-size: cover;
       background-position: center;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
       overflow: hidden;
       cursor: grab;
       touch-action: none;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: 22px;
+      justify-content: space-between;
+      padding: 16px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       transform-origin: 50% 100%;
       will-change: transform;
+      user-select: none;
     }
 
-    .tinder-card:active {
+    .tinder-card-modern:active {
       cursor: grabbing;
     }
 
-    .card-gradient-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.92) 100%);
-      pointer-events: none;
+    .story-progress-bars {
+      display: flex;
+      gap: 4px;
+      position: relative;
+      z-index: 20;
     }
 
-    .card-badge-overlay {
+    .story-bar-segment {
+      flex: 1;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 9999px;
+      transition: background 0.2s;
+    }
+
+    .story-bar-segment.active {
+      background: #ffffff;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+    }
+
+    .photo-tap-left, .photo-tap-right {
       position: absolute;
       top: 30px;
+      bottom: 100px;
+      width: 50%;
+      z-index: 15;
+    }
+    .photo-tap-left { left: 0; }
+    .photo-tap-right { right: 0; }
+
+    .card-vignette-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0.95) 100%);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .card-action-badge {
+      position: absolute;
+      top: 36px;
       padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 1.4rem;
+      border-radius: 10px;
+      font-size: 1.6rem;
       font-weight: 900;
       letter-spacing: 2px;
       text-transform: uppercase;
       opacity: 0;
-      transform: scale(0.85);
-      transition: opacity 0.15s ease, transform 0.15s ease;
       pointer-events: none;
-      z-index: 10;
+      z-index: 25;
+      border-width: 4px;
+      border-style: solid;
+      transition: opacity 0.12s ease;
     }
 
-    .badge-like {
-      left: 24px;
-      border: 4px solid var(--like);
-      color: var(--like);
+    .badge-like-tag {
+      left: 20px;
+      border-color: var(--color-like);
+      color: var(--color-like);
       transform: rotate(-16deg);
     }
 
-    .badge-nope {
-      right: 24px;
-      border: 4px solid var(--pass);
-      color: var(--pass);
+    .badge-nope-tag {
+      right: 20px;
+      border-color: var(--color-pass);
+      color: var(--color-pass);
       transform: rotate(16deg);
     }
 
-    .card-info-content {
+    .card-footer-info {
       position: relative;
-      z-index: 5;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .user-name-age {
+    .candidate-name-age-row {
       font-family: var(--font-heading);
-      font-size: 1.7rem;
+      font-size: 1.75rem;
       font-weight: 800;
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 4px;
     }
 
-    .verified-badge {
+    .verified-icon-blue {
       color: #38bdf8;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
     }
 
-    .user-city {
+    .candidate-city-tag {
       font-size: 0.88rem;
       color: #cbd5e1;
       display: flex;
       align-items: center;
-      gap: 5px;
-      margin-bottom: 8px;
+      gap: 4px;
     }
 
-    .user-bio {
+    .candidate-bio-text {
       font-size: 0.85rem;
       color: #e2e8f0;
       line-height: 1.4;
-      margin-bottom: 12px;
+      margin: 4px 0 8px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
 
-    .passions-row {
+    .candidate-passions-row {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
     }
 
-    .passion-pill {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
+    .card-passion-pill {
+      background: rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(10px);
       padding: 4px 10px;
       border-radius: 9999px;
       font-size: 0.75rem;
       font-weight: 600;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    /* Floating Actions Bar */
-    .deck-actions-bar {
+    .btn-open-detail-info {
+      position: absolute;
+      right: 0;
+      bottom: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      z-index: 12;
+    }
+
+    .deck-actions-toolbar {
       display: flex;
       align-items: center;
       justify-content: space-around;
-      padding: 6px 10px;
-      height: 76px;
+      padding: 6px 12px 10px;
+      height: 72px;
     }
 
-    .action-circle {
-      width: 52px;
-      height: 52px;
+    .action-btn-circle {
       border-radius: 50%;
       border: none;
-      background: var(--bg-card);
+      background: var(--bg-surface);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
       cursor: pointer;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-      transition: transform 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     }
 
-    .action-circle:hover {
-      transform: scale(1.15);
+    .action-btn-circle:hover {
+      transform: scale(1.12);
     }
 
-    .btn-rewind { color: #f59e0b; width: 44px; height: 44px; font-size: 1.1rem; }
-    .btn-pass { color: var(--pass); font-size: 1.4rem; }
-    .btn-superlike { color: var(--superlike); width: 44px; height: 44px; font-size: 1.1rem; }
-    .btn-like { color: var(--like); font-size: 1.5rem; }
-    .btn-boost { color: var(--boost); width: 44px; height: 44px; font-size: 1.1rem; }
-
-    /* Matches & Chat Screen */
-    .matches-screen {
-      padding: 16px;
-      overflow-y: auto;
+    .action-btn-circle:active {
+      transform: scale(0.92);
     }
 
-    .section-title-sm {
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: var(--primary);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 12px;
+    .btn-action-small {
+      width: 44px;
+      height: 44px;
+      font-size: 1.15rem;
     }
 
-    .new-matches-row {
-      display: flex;
-      gap: 14px;
-      overflow-x: auto;
-      padding-bottom: 14px;
-      margin-bottom: 20px;
+    .btn-action-large {
+      width: 58px;
+      height: 58px;
+      font-size: 1.55rem;
     }
 
-    .new-match-avatar {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-    }
+    .act-rewind { color: var(--color-rewind); }
+    .act-pass { color: var(--color-pass); }
+    .act-superlike { color: var(--color-superlike); }
+    .act-like { color: var(--color-like); }
+    .act-boost { color: var(--color-boost); }
 
-    .avatar-ring {
-      width: 62px;
-      height: 62px;
-      border-radius: 50%;
-      padding: 3px;
-      background: var(--primary-gradient);
-    }
-
-    .avatar-ring img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .match-name-tag {
-      font-size: 0.78rem;
-      font-weight: 700;
-    }
-
-    .conversations-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .conv-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 14px;
-      border: 1px solid var(--border-subtle);
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .conv-item:hover {
-      background: rgba(255, 255, 255, 0.07);
-    }
-
-    .conv-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .conv-info {
-      flex: 1;
-    }
-
-    .conv-name {
-      font-weight: 700;
-      font-size: 0.95rem;
-      margin-bottom: 2px;
-    }
-
-    .conv-snippet {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 220px;
-    }
-
-    /* Chat Room Screen */
-    .chat-screen {
-      display: none;
-      flex-direction: column;
-      padding: 0;
-      background: var(--bg-phone);
-    }
-
-    .chat-header {
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .chat-messages-wrap {
-      flex: 1;
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .msg-bubble {
-      max-width: 78%;
-      padding: 10px 14px;
-      border-radius: 18px;
-      font-size: 0.88rem;
-      line-height: 1.4;
-      position: relative;
-    }
-
-    .msg-mine {
-      align-self: flex-end;
-      background: var(--primary-gradient);
-      color: #fff;
-      border-bottom-right-radius: 4px;
-    }
-
-    .msg-theirs {
-      align-self: flex-start;
-      background: var(--bg-card);
-      color: #f1f5f9;
-      border: 1px solid var(--border-subtle);
-      border-bottom-left-radius: 4px;
-    }
-
-    .chat-input-bar {
-      padding: 10px 14px;
-      display: flex;
-      gap: 8px;
-      border-top: 1px solid var(--border-subtle);
-      background: var(--bg-phone);
-    }
-
-    .chat-input {
-      flex: 1;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 9999px;
-      padding: 10px 18px;
-      color: #fff;
-      font-size: 0.88rem;
-      outline: none;
-    }
-
-    .chat-send-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--primary-gradient);
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-    }
-
-    /* Match Modal */
-    .match-overlay {
+    /* 5. MATCH MODAL */
+    .match-overlay-popup {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(253, 80, 104, 0.95) 0%, rgba(255, 96, 54, 0.96) 100%);
-      backdrop-filter: blur(14px);
+      background: rgba(10, 12, 16, 0.94);
+      backdrop-filter: blur(24px) saturate(180%);
       z-index: 200;
       display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 30px;
+      padding: 24px;
       text-align: center;
-      animation: zoomMatch 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .match-overlay.active {
+    .match-overlay-popup.active {
       display: flex;
+      animation: matchPopupAnim 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    @keyframes zoomMatch {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    @keyframes matchPopupAnim {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
 
-    .match-badge-title {
+    .match-banner-title {
       font-family: var(--font-heading);
       font-size: 2.8rem;
       font-weight: 900;
-      font-style: italic;
-      color: #fff;
-      text-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-      margin-bottom: 6px;
+      background: var(--flame-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
     }
 
-    .match-subtext {
-      font-size: 0.95rem;
-      color: #ffe4e6;
-      margin-bottom: 30px;
-    }
-
-    .match-avatars-duo {
+    .match-interlocking-avatars {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 36px;
+      margin: 28px 0;
     }
 
-    .match-avatar-circle {
-      width: 100px;
-      height: 100px;
+    .match-avatar-frame {
+      width: 104px;
+      height: 104px;
       border-radius: 50%;
-      border: 4px solid #fff;
+      border: 4px solid var(--flame-coral);
       overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 30px rgba(253, 58, 115, 0.4);
     }
 
-    .match-avatar-circle img {
+    .avatar-offset-left {
+      margin-right: -20px;
+      z-index: 2;
+    }
+
+    .match-avatar-frame img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .match-avatar-left {
-      margin-right: -18px;
-      z-index: 1;
+    /* 6. MATCHES LIST */
+    .matches-tab-screen {
+      padding: 16px 20px 80px;
     }
 
-    .match-actions-col {
+    .section-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .new-matches-scroll-row {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 14px;
+      scrollbar-width: none;
+    }
+
+    .new-matches-scroll-row::-webkit-scrollbar { display: none; }
+
+    .new-match-bubble {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .match-gradient-ring {
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      padding: 2.5px;
+      background: var(--flame-gradient);
+    }
+
+    .match-gradient-ring img {
       width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--bg-phone);
+    }
+
+    .new-match-name {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      max-width: 66px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .messages-thread-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .thread-row-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .thread-row-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .thread-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .thread-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .thread-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #f8fafc;
+      margin-bottom: 2px;
+    }
+
+    .thread-preview {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 7. CHAT */
+    .screen-chat-room {
+      padding: 0;
+    }
+
+    .chat-messages-container {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .btn-match-chat {
-      background: #fff;
-      color: var(--primary);
+    .chat-bubble {
+      max-width: 78%;
+      padding: 11px 16px;
+      border-radius: 18px;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .bubble-mine {
+      align-self: flex-end;
+      background: var(--flame-gradient);
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 4px 14px rgba(253, 58, 115, 0.25);
+    }
+
+    .bubble-theirs {
+      align-self: flex-start;
+      background: var(--bg-surface);
+      color: #f1f5f9;
+      border-bottom-left-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .chat-input-bar-wrap {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-phone);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-input-box {
+      flex: 1;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9999px;
+      padding: 10px 18px;
+      color: #ffffff;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .chat-send-action-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--flame-gradient);
       border: none;
-      padding: 14px;
-      border-radius: 9999px;
-      font-weight: 800;
-      font-size: 0.95rem;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-    }
-
-    .btn-match-keep {
-      background: transparent;
-      border: 2px solid #fff;
       color: #fff;
-      padding: 12px;
-      border-radius: 9999px;
-      font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 8. PROFILE */
+    .profile-tab-screen {
+      padding: 20px 20px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .my-avatar-frame {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      padding: 3px;
+      background: var(--flame-gradient);
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .my-avatar-frame img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--bg-phone);
+    }
+
+    .edit-avatar-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #111;
+      border: 2px solid var(--bg-phone);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
       cursor: pointer;
     }
 
-    /* Simulator Meta Bar Footer */
-    .simulator-footer-hint {
-      margin-top: 18px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
+    .profile-info-card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 16px;
+      margin: 16px 0;
+      text-align: left;
+    }
+
+    /* TAB BAR */
+    .bottom-tab-bar {
+      height: 60px;
+      background: #151821;
+      border-top: 1px solid var(--border-subtle);
+      display: none;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 10px;
+      z-index: 105;
+    }
+
+    .bottom-tab-bar.visible {
+      display: flex;
+    }
+
+    .tab-item-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.45rem;
+      padding: 8px 16px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .tab-item-btn.active {
+      color: var(--flame-coral);
+      transform: scale(1.1);
+    }
+
+    .tab-unread-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--flame-coral);
+      position: absolute;
+      top: 6px;
+      right: 14px;
+      box-shadow: 0 0 6px var(--flame-coral);
+    }
+
+    .simulator-hint-footer {
+      margin-top: 14px;
+      color: #64748b;
+      font-size: 0.78rem;
       text-align: center;
     }
   </style>
 </head>
 <body>
 
-  <!-- Teléfono Simulador -->
+  <!-- SIMULADOR SMARTPHONE -->
   <div class="phone-simulator">
-    <div class="phone-notch"></div>
-    <div class="status-bar">
+    <!-- Dynamic Island -->
+    <div class="phone-dynamic-island">
+      <div class="island-cam"></div>
+      <div class="island-sensor"></div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="phone-status-bar">
       <span>9:41</span>
-      <span>5G 📶 100% 🔋</span>
+      <span>5G ðŸ“¶ 100% ðŸ”‹</span>
     </div>
 
-    <!-- Header de la Aplicación -->
-    <header class="app-header">
-      <div class="brand-flame" id="btn-show-deck">
-        <span>🔥</span>
-        <span>tinder</span>
+    <div class="viewport">
+      <!-- 1. WELCOME -->
+      <section id="screen-welcome" class="app-screen screen-welcome active">
+        <div class="welcome-hero">
+          <div class="welcome-flame-icon">ðŸ”¥</div>
+          <h1 class="welcome-title">tinder</h1>
+          <p class="welcome-tagline">It's a Match!</p>
+          <div class="welcome-feature-pills">
+            <span class="welcome-pill">Swipe & Match</span>
+            <span class="welcome-pill">Chat en Vivo</span>
+            <span class="welcome-pill">Perfiles Reales</span>
+          </div>
+        </div>
+
+        <div class="welcome-actions-box">
+          <button class="btn-flame-main" id="btn-welcome-register">CREAR CUENTA</button>
+          <button class="btn-outline-white" id="btn-welcome-login">INICIAR SESIÃ“N</button>
+          <button class="btn-ghost-demo" id="btn-welcome-quick-demo">âš¡ MODO DEMO INMEDIATO</button>
+          
+          <p class="terms-disclaimer">
+            Al registrarte o iniciar sesiÃ³n, aceptas nuestros TÃ©rminos de Servicio y PolÃ­tica de Privacidad.
+          </p>
+        </div>
+      </section>
+
+      <!-- 2. REGISTER -->
+      <section id="screen-register" class="app-screen">
+        <div class="screen-header-bar">
+          <button class="btn-header-back" id="btn-reg-back">â†</button>
+          <div class="screen-header-title">Crear Cuenta</div>
+          <div style="width: 24px;"></div>
+        </div>
+
+        <form id="register-form" class="register-body-form" onsubmit="event.preventDefault(); handleCompleteRegister();">
+          <div class="form-row-2col">
+            <div class="form-group-wrap">
+              <label class="form-label">Nombre</label>
+              <input type="text" id="reg-name" class="form-input-control" placeholder="Ej: Camilo" required value="Camilo">
+            </div>
+            <div class="form-group-wrap">
+              <label class="form-label">Apellido</label>
+              <input type="text" id="reg-lastname" class="form-input-control" placeholder="Ej: Silva" required value="Silva">
+            </div>
+          </div>
+
+          <div class="form-group-wrap">
+            <label class="form-label">Correo ElectrÃ³nico</label>
+            <input type="email" id="reg-email" class="form-input-control" placeholder="tu@correo.com" required value="camilo@tinder.app">
+          </div>
+
+          <div class="form-group-wrap">
+            <label class="form-label">ContraseÃ±a</label>
+            <input type="password" id="reg-password" class="form-input-control" placeholder="MÃ­nimo 8 caracteres" required value="password123">
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group-wrap">
+              <label class="form-label">Fecha Nacimiento</label>
+              <input type="date" id="reg-birth" class="form-input-control" required value="2000-05-15">
+            </div>
+            <div class="form-group-wrap">
+              <label class="form-label">Ciudad</label>
+              <input type="text" id="reg-city" class="form-input-control" placeholder="Ej: MedellÃ­n" required value="MedellÃ­n">
+            </div>
+          </div>
+
+          <div class="form-group-wrap">
+            <label class="form-label">GÃ©nero</label>
+            <select id="reg-gender" class="form-input-control">
+              <option value="Hombre">Hombre</option>
+              <option value="Mujer">Mujer</option>
+              <option value="No binario">No binario</option>
+            </select>
+          </div>
+
+          <div class="form-group-wrap">
+            <label class="form-label">BiografÃ­a</label>
+            <textarea id="reg-bio" class="form-input-control" rows="2" placeholder="CuÃ©ntale al mundo sobre ti...">Desarrollador y apasionado por la mÃºsica y el buen cafÃ© â˜•ðŸŽ¸</textarea>
+          </div>
+
+          <!-- Fotos -->
+          <div class="photos-picker-container">
+            <div class="photos-header-row">
+              <span class="form-label">Fotos de Perfil (1-6)</span>
+              <small style="color: #cbd5e1; font-size: 0.75rem;" id="photos-counter">1 / 6 fotos</small>
+            </div>
+            <div class="photos-grid-6">
+              <div class="photo-slot has-image" id="slot-0">
+                <img id="slot-0-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300" alt="Avatar">
+              </div>
+              <div class="photo-slot" onclick="addSamplePhoto(1)" id="slot-1"><span style="font-size: 1.3rem;">+</span></div>
+              <div class="photo-slot" onclick="addSamplePhoto(2)" id="slot-2"><span style="font-size: 1.3rem;">+</span></div>
+              <div class="photo-slot" onclick="addSamplePhoto(3)" id="slot-3"><span style="font-size: 1.3rem;">+</span></div>
+              <div class="photo-slot" onclick="addSamplePhoto(4)" id="slot-4"><span style="font-size: 1.3rem;">+</span></div>
+              <div class="photo-slot" onclick="addSamplePhoto(5)" id="slot-5"><span style="font-size: 1.3rem;">+</span></div>
+            </div>
+          </div>
+
+          <!-- Pasiones -->
+          <div class="form-group-wrap">
+            <div class="photos-header-row">
+              <span class="form-label">Tus Pasiones (Elige 3-5)</span>
+              <small style="color: #cbd5e1; font-size: 0.75rem;" id="passions-counter">3 / 5 seleccionadas</small>
+            </div>
+            <div class="passions-chips-grid" id="passions-chips-container">
+              <!-- DinÃ¡mico -->
+            </div>
+          </div>
+
+          <button type="submit" class="btn-flame-main" style="margin-top: 10px;">FINALIZAR REGISTRO</button>
+          <div style="text-align: center; margin-top: 4px;">
+            <a href="#" id="link-goto-login" style="font-size: 0.82rem; color: #94a3b8; text-decoration: underline;">Â¿Ya tienes cuenta? Inicia sesiÃ³n</a>
+          </div>
+        </form>
+      </section>
+
+      <!-- 3. LOGIN -->
+      <section id="screen-login" class="app-screen">
+        <div class="screen-header-bar">
+          <button class="btn-header-back" id="btn-login-back">â†</button>
+          <div class="screen-header-title">Iniciar SesiÃ³n</div>
+          <div style="width: 24px;"></div>
+        </div>
+
+        <form id="login-form" class="login-body-form" onsubmit="event.preventDefault(); handleCompleteLogin();">
+          <div style="text-align: center; margin-bottom: 12px;">
+            <div style="font-size: 3rem;">ðŸ”¥</div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: #fff;">Â¡Bienvenido de nuevo!</h2>
+            <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 4px;">Inicia sesiÃ³n para descubrir nuevos matches</p>
+          </div>
+
+          <div class="form-group-wrap">
+            <label class="form-label">Correo ElectrÃ³nico</label>
+            <input type="email" id="login-email" class="form-input-control" placeholder="jane@doe.com" required value="estudiante@tinder.app">
+          </div>
+
+          <div class="form-group-wrap">
+            <label class="form-label">ContraseÃ±a</label>
+            <div class="password-input-wrap">
+              <input type="password" id="login-password" class="form-input-control" style="width: 100%;" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required value="password123">
+              <button type="button" class="password-toggle-eye" onclick="togglePasswordVisibility()">ðŸ‘ï¸</button>
+            </div>
+          </div>
+
+          <div class="lang-switcher-row">
+            <span style="font-size: 0.82rem; color: #cbd5e1;">ðŸŒ Idioma de interfaz:</span>
+            <select id="login-lang-select" style="background: transparent; border: none; color: var(--flame-coral); font-weight: 700; font-size: 0.85rem;">
+              <option value="es">ðŸ‡ªðŸ‡¸ EspaÃ±ol</option>
+              <option value="en">ðŸ‡ºðŸ‡¸ English</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-flame-main" style="margin-top: 10px;">INICIAR SESIÃ“N</button>
+          
+          <div style="text-align: center; margin-top: 6px;">
+            <a href="#" id="link-goto-register" style="font-size: 0.82rem; color: #94a3b8; text-decoration: underline;">Â¿No tienes cuenta aÃºn? RegÃ­strate</a>
+          </div>
+        </form>
+      </section>
+
+      <!-- 4. MATCHING DECK -->
+      <section id="screen-deck" class="app-screen">
+        <div class="screen-header-bar">
+          <div style="display: flex; align-items: center; gap: 6px; cursor: pointer;" onclick="navToTab('deck')">
+            <span style="font-size: 1.4rem;">ðŸ”¥</span>
+            <span style="font-family: var(--font-heading); font-weight: 900; font-size: 1.3rem; background: var(--flame-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">tinder</span>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn-header-back" onclick="alert('Filtros: Preferencias de edad (18-35), Distancia (hasta 50km)')" title="Filtros">âš™ï¸</button>
+          </div>
+        </div>
+
+        <div class="deck-screen-layout">
+          <div class="deck-container-area" id="deck-mount-point" class="tinder-deck-container">
+            <!-- Tarjetas dinÃ¡micas -->
+          </div>
+
+          <!-- Toolbar -->
+          <div class="deck-actions-toolbar">
+            <button class="action-btn-circle btn-action-small act-rewind" id="btn-act-rewind" title="Rebobinar">â†º</button>
+            <button class="action-btn-circle btn-action-large act-pass" id="btn-act-pass" title="Nope">âœ•</button>
+            <button class="action-btn-circle btn-action-small act-superlike" id="btn-act-superlike" title="Superlike">â­</button>
+            <button class="action-btn-circle btn-action-large act-like" id="btn-act-like" title="Like">ðŸ’š</button>
+            <button class="action-btn-circle btn-action-small act-boost" id="btn-act-boost" title="Boost">âš¡</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. MATCHES -->
+      <section id="screen-matches" class="app-screen matches-tab-screen">
+        <div class="screen-header-bar" style="margin: -16px -20px 16px; padding: 0 20px;">
+          <div class="screen-header-title">Matches & Mensajes</div>
+        </div>
+
+        <div class="section-eyebrow">Nuevos Matches</div>
+        <div class="new-matches-scroll-row" id="matches-bubbles-row"></div>
+
+        <div class="section-eyebrow" style="margin-top: 14px;">Conversaciones</div>
+        <div class="messages-thread-list" id="conversations-thread-list"></div>
+      </section>
+
+      <!-- 6. CHAT -->
+      <section id="screen-chat" class="view-chat-room" class="app-screen screen-chat-room">
+        <div class="screen-header-bar">
+          <button class="btn-header-back" onclick="navToTab('matches')">â†</button>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img id="chat-peer-avatar" src="" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover;">
+            <div style="text-align: left;">
+              <div id="chat-peer-name" style="font-weight: 700; font-size: 0.92rem; color: #fff;">SofÃ­a</div>
+              <div style="font-size: 0.72rem; color: #10b981;">En lÃ­nea ahora</div>
+            </div>
+          </div>
+          <div style="width: 24px;"></div>
+        </div>
+
+        <div class="chat-messages-container" id="chat-stream"></div>
+
+        <div class="chat-input-bar-wrap">
+          <input type="text" id="chat-type-input" class="chat-input-box" placeholder="Escribe un mensaje...">
+          <button class="chat-send-action-btn" id="btn-chat-send">âž¤</button>
+        </div>
+      </section>
+
+      <!-- 7. PROFILE -->
+      <section id="screen-profile" class="app-screen profile-tab-screen">
+        <div class="screen-header-bar" style="width: 100%; margin: -20px -20px 20px; padding: 0 20px;">
+          <div class="screen-header-title">Mi Perfil</div>
+        </div>
+
+        <div class="my-avatar-frame">
+          <img id="my-profile-pic" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300" alt="Mi Foto">
+          <div class="edit-avatar-badge" title="Cambiar foto">ðŸ“·</div>
+        </div>
+
+        <h2 id="my-profile-name" style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: #fff;">Camilo Silva, 24</h2>
+        <p id="my-profile-location" style="color: #94a3b8; font-size: 0.85rem;">ðŸ“ MedellÃ­n, Colombia</p>
+
+        <div class="profile-info-card">
+          <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 6px;">BiografÃ­a</div>
+          <p id="my-profile-bio" style="font-size: 0.88rem; color: #e2e8f0; line-height: 1.45;">Desarrollador y apasionado por la mÃºsica y el buen cafÃ© â˜•ðŸŽ¸</p>
+        </div>
+
+        <div class="profile-info-card">
+          <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 8px;">Mis Pasiones</div>
+          <div class="candidate-passions-row" id="my-profile-passions">
+            <span class="card-passion-pill">MÃºsica</span>
+            <span class="card-passion-pill">CafÃ©</span>
+            <span class="card-passion-pill">TecnologÃ­a</span>
+          </div>
+        </div>
+
+        <button class="btn-outline-white" style="width: 100%; margin-top: 10px;" onclick="handleLogout()">CERRAR SESIÃ“N</button>
+      </section>
+
+      <!-- MODAL DETALLE -->
+      <div id="modal-detail-overlay" class="match-overlay-popup">
+        <div style="background: var(--bg-card); border-radius: 24px; padding: 20px; width: 100%; max-width: 360px; max-height: 80vh; overflow-y: auto; text-align: left; border: 1px solid var(--border-subtle);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h3 id="modal-detail-name" style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff;">Detalle</h3>
+            <button onclick="closeDetailModal()" style="background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer;">âœ•</button>
+          </div>
+          <img id="modal-detail-photo" src="" style="width: 100%; height: 260px; object-fit: cover; border-radius: 16px; margin-bottom: 14px;">
+          <p id="modal-detail-city" style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 8px;">ðŸ“ UbicaciÃ³n</p>
+          <p id="modal-detail-bio" style="color: #e2e8f0; font-size: 0.9rem; line-height: 1.45; margin-bottom: 14px;">Bio</p>
+          <div id="modal-detail-passions" style="display: flex; gap: 6px; flex-wrap: wrap;"></div>
+        </div>
       </div>
-      <div style="display: flex; gap: 8px;">
-        <button class="header-nav-btn active" id="nav-btn-deck" title="Descubrir">🔥</button>
-        <button class="header-nav-btn" id="nav-btn-matches" title="Matches y Mensajes">
-          💬
-          <span class="badge-dot"></span>
-        </button>
-      </div>
-    </header>
 
-    <div class="app-viewport">
-      <!-- VISTA 1: DECK DE MATCHING -->
-      <section id="view-deck" class="view-screen active">
-        <div class="deck-container" id="tinder-deck-container">
-          <!-- Tarjetas renderizadas dinámicamente -->
-        </div>
+      <!-- MODAL MATCH -->
+      <div id="modal-match-overlay" class="match-modal-overlay" class="match-overlay-popup">
+        <div class="match-banner-title">Â¡Es un Match!</div>
+        <p id="match-modal-text" style="color: #cbd5e1; font-size: 0.92rem; margin-top: 6px;">A ti y a SofÃ­a se gustaron mutuamente.</p>
 
-        <!-- Botones Flotantes de Acción -->
-        <div class="deck-actions-bar">
-          <button class="action-circle btn-rewind" id="btn-rewind" title="Rebobinar">↺</button>
-          <button class="action-circle btn-pass" id="btn-pass" title="Pasar">✕</button>
-          <button class="action-circle btn-superlike" id="btn-superlike" title="Superlike">⭐</button>
-          <button class="action-circle btn-like" id="btn-like" title="Me Gusta">💚</button>
-          <button class="action-circle btn-boost" id="btn-boost" title="Boost">⚡</button>
-        </div>
-      </section>
-
-      <!-- VISTA 2: BANDEJA DE MATCHES Y CHATS -->
-      <section id="view-matches" class="view-screen matches-screen">
-        <div class="section-title-sm">Nuevos Matches</div>
-        <div class="new-matches-row" id="new-matches-bar">
-          <!-- Inyectado dinámicamente -->
-        </div>
-
-        <div class="section-title-sm">Mensajes</div>
-        <div class="conversations-list" id="conversations-list-container">
-          <!-- Inyectado dinámicamente -->
-        </div>
-      </section>
-
-      <!-- VISTA 3: SALA DE CHAT EN VIVO -->
-      <section id="view-chat-room" class="view-screen chat-screen">
-        <div class="chat-header">
-          <button id="btn-chat-back" style="background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer;">←</button>
-          <img id="chat-header-avatar" src="" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
-          <div>
-            <div id="chat-header-name" style="font-weight: 700; font-size: 0.95rem;">Usuario</div>
-            <div style="font-size: 0.72rem; color: #10b981;">En línea ahora</div>
+        <div class="match-interlocking-avatars">
+          <div class="match-avatar-frame avatar-offset-left">
+            <img id="match-my-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300" alt="TÃº">
+          </div>
+          <div class="match-avatar-frame">
+            <img id="match-target-avatar" src="" alt="Match">
           </div>
         </div>
 
-        <div class="chat-messages-wrap" id="chat-messages-container">
-          <!-- Mensajes dinámicos -->
-        </div>
-
-        <div class="chat-input-bar">
-          <input type="text" id="chat-msg-input" class="chat-input" placeholder="Escribe un mensaje...">
-          <button class="chat-send-btn" id="btn-send-msg">➤</button>
-        </div>
-      </section>
-
-      <!-- MODAL DE MATCH (¡Es un Match!) -->
-      <div class="match-overlay" id="match-modal-overlay">
-        <div class="match-badge-title">¡Es un Match!</div>
-        <p class="match-subtext" id="match-modal-subtext">A ti y a Sofía se gustaron mutuamente.</p>
-        
-        <div class="match-avatars-duo">
-          <div class="match-avatar-circle match-avatar-left">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300" alt="Tú">
-          </div>
-          <div class="match-avatar-circle">
-            <img id="match-modal-target-photo" src="" alt="Match">
-          </div>
-        </div>
-
-        <div class="match-actions-col">
-          <button class="btn-match-chat" id="btn-match-open-chat">ENVIAR MENSAJE</button>
-          <button class="btn-match-keep" id="btn-match-keep-swiping">SEGUIR EXPLORANDO</button>
+        <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 280px;">
+          <button class="btn-flame-main" id="btn-match-to-chat">ENVIAR MENSAJE</button>
+          <button class="btn-outline-white" id="btn-match-continue">SEGUIR EXPLORANDO</button>
         </div>
       </div>
     </div>
+
+    <!-- BOTTOM TAB BAR -->
+    <nav class="bottom-tab-bar" id="app-bottom-nav">
+      <button class="tab-item-btn active" id="tab-btn-deck" onclick="navToTab('deck')" title="Explorar">ðŸ”¥</button>
+      <button class="tab-item-btn" id="tab-btn-matches" onclick="navToTab('matches')" title="Mensajes">
+        ðŸ’¬
+        <span class="tab-unread-dot" id="tab-unread-indicator"></span>
+      </button>
+      <button class="tab-item-btn" id="tab-btn-profile" onclick="navToTab('profile')" title="Mi Perfil">ðŸ‘¤</button>
+    </nav>
   </div>
 
-  <div class="simulator-footer-hint">
-    ✨ <strong>TinderApp Mobile Simulator</strong> &bull; Arrastra las tarjetas con el ratón o desliza con el dedo &bull; Ionic 8 / Angular 20
+  <div class="simulator-hint-footer">
+    ðŸ”¥ <strong>TinderApp Mobile Simulator</strong> &bull; Flujo Completo: Registro &bull; Login &bull; Swipe Deck con FÃ­sica Dual &bull; Chat en Vivo
   </div>
 
   <script>
-    // Dataset Mock Autónomo de Alta Fidelidad
     const MOCK_PROFILES = [
+    // Backwards compatibility alias
+    // and candidates list
+  ];
+  const CANDIDATE_PROFILES = [
       {
         uid: 'user-sofia',
-        name: 'Sofía',
+        name: 'SofÃ­a',
         age: 24,
-        city: 'Bogotá, Colombia',
-        bio: 'Diseñadora UX & aficionada al café de especialidad. Si te gusta el senderismo de montaña, nos llevaremos genial ☕🏔️',
-        photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&auto=format&fit=crop&q=80',
-        passions: ['Café', 'Diseño UX', 'Hiking', 'Cine']
+        city: 'BogotÃ¡, Colombia',
+        bio: 'DiseÃ±adora UX & aficionada al cafÃ© de especialidad. Si te gusta el senderismo de montaÃ±a, nos llevaremos genial â˜•ðŸ”ï¸',
+        photos: [
+          'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&auto=format&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80'
+        ],
+        passions: ['CafÃ©', 'DiseÃ±o UX', 'Hiking', 'Cine']
       },
       {
         uid: 'user-mateo',
         name: 'Mateo',
         age: 26,
-        city: 'Medellín, Colombia',
-        bio: 'Arquitecto de software de día, baterista de noche 🎸💻 Buscando a alguien para ir a conciertos y compartir playlists.',
-        photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=80',
-        passions: ['Música', 'Tecnología', 'Conciertos', 'Gatos']
+        city: 'MedellÃ­n, Colombia',
+        bio: 'Arquitecto de software de dÃ­a, baterista de noche ðŸŽ¸ðŸ’» Buscando a alguien para ir a conciertos y compartir playlists.',
+        photos: [
+          'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=80'
+        ],
+        passions: ['MÃºsica', 'TecnologÃ­a', 'Conciertos', 'Gatos']
       },
       {
         uid: 'user-valentina',
         name: 'Valentina',
         age: 23,
         city: 'Cali, Colombia',
-        bio: 'Fotógrafa urbana. Si te gusta bailar salsa y los viajes por carretera improvisados bajo las estrellas 📸💃🌌',
-        photo: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&auto=format&fit=crop&q=80',
-        passions: ['Fotografía', 'Salsa', 'Viajes', 'Arte']
+        bio: 'FotÃ³grafa urbana. Si te gusta bailar salsa y los viajes por carretera improvisados bajo las estrellas ðŸ“¸ðŸ’ƒðŸŒŒ',
+        photos: [
+          'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&auto=format&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&auto=format&fit=crop&q=80'
+        ],
+        passions: ['FotografÃ­a', 'Salsa', 'Viajes', 'Arte']
       },
       {
         uid: 'user-lucas',
         name: 'Lucas',
         age: 25,
         city: 'Barranquilla, Colombia',
-        bio: 'Chef aficionado y amante del mar. La pasta casera fresca y los atardeceres en la playa son mi debilidad 🍝🌊',
-        photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=80',
-        passions: ['Gastronomía', 'Playa', 'Fitness', 'Perros']
+        bio: 'Chef aficionado y amante del mar. La pasta casera fresca y los atardeceres en la playa son mi debilidad ðŸðŸŒŠ',
+        photos: [
+          'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=80'
+        ],
+        passions: ['GastronomÃ­a', 'Playa', 'Fitness', 'Perros']
       },
       {
         uid: 'user-isabella',
         name: 'Isabella',
         age: 24,
         city: 'Cartagena, Colombia',
-        bio: 'Bióloga marina. Cuidando los arrecifes de coral y buceando en el Caribe 🐠🌊 Siempre lista para un té y un buen libro.',
-        photo: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&auto=format&fit=crop&q=80',
+        bio: 'BiÃ³loga marina. Cuidando los arrecifes de coral y buceando en el Caribe ðŸ ðŸŒŠ Siempre lista para un tÃ© y un buen libro.',
+        photos: [
+          'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&auto=format&fit=crop&q=80'
+        ],
         passions: ['Buceo', 'Yoga', 'Naturaleza', 'Lectura']
       }
     ];
 
-    let currentIndex = 0;
+    const AVAILABLE_PASSIONS = [
+      'CafÃ©', 'MÃºsica', 'Senderismo', 'FotografÃ­a', 'Viajes', 
+      'Cine', 'Cocina', 'Yoga', 'Gatos', 'Perros', 'TecnologÃ­a', 'Lectura', 'Salsa'
+    ];
+
+    const SAMPLE_PHOTO_CHOICES = [
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300',
+      'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=300',
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300',
+      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300'
+    ];
+
+    let currentUser = {
+      name: 'Camilo',
+      lastName: 'Silva',
+      age: 24,
+      city: 'MedellÃ­n, Colombia',
+      bio: 'Desarrollador y apasionado por la mÃºsica y el buen cafÃ© â˜•ðŸŽ¸',
+      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300',
+      passions: ['MÃºsica', 'CafÃ©', 'TecnologÃ­a']
+    };
+
+    let selectedRegisterPassions = ['MÃºsica', 'CafÃ©', 'TecnologÃ­a'];
+    let registeredPhotos = [SAMPLE_PHOTO_CHOICES[0]];
+    let currentCandidateIndex = 0;
+    let candidateCurrentPhotoIndex = 0;
+
     let matchesList = [
       {
-        profile: MOCK_PROFILES[0],
-        lastMsg: '¡Hola! Qué gusto coincidir contigo por aquí 😊'
+        profile: CANDIDATE_PROFILES[0],
+        lastMsg: 'Â¡Hola! QuÃ© gusto coincidir contigo por aquÃ­ ðŸ˜Š'
       }
     ];
-    let activeChatUser = null;
+
     let chatHistories = {
       'user-sofia': [
-        { from: 'theirs', text: '¡Hola! Qué gusto coincidir contigo por aquí 😊' }
+        { from: 'theirs', text: 'Â¡Hola! QuÃ© gusto coincidir contigo por aquÃ­ ðŸ˜Š' }
       ]
     };
 
-    // DOM Elements
-    const deckContainer = document.getElementById('tinder-deck-container');
-    const viewDeck = document.getElementById('view-deck');
-    const viewMatches = document.getElementById('view-matches');
-    const viewChat = document.getElementById('view-chat-room');
-    const matchModal = document.getElementById('match-modal-overlay');
+    let activeChatUser = null;
 
-    function renderCard() {
-      deckContainer.innerHTML = '';
-      if (currentIndex >= MOCK_PROFILES.length) {
-        deckContainer.innerHTML = `
-          <div style="text-align: center; padding-top: 140px; color: var(--text-muted);">
-            <div style="font-size: 3.5rem; margin-bottom: 12px;">💫</div>
-            <h3 style="color: #fff; margin-bottom: 6px;">No hay más perfiles</h3>
-            <p style="font-size: 0.9rem; max-width: 260px; margin: 0 auto 20px;">Has revisado todos los candidatos cercanos en este momento.</p>
-            <button onclick="resetDeck()" style="background: var(--primary-gradient); color: #fff; border: none; padding: 10px 22px; border-radius: 9999px; font-weight: 700; cursor: pointer;">Reiniciar Explorador</button>
+    function showScreen(screenId) {
+      document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(screenId);
+      if (target) target.classList.add('active');
+
+      const bottomNav = document.getElementById('app-bottom-nav');
+      if (screenId === 'screen-deck' || screenId === 'screen-matches' || screenId === 'screen-profile') {
+        bottomNav.classList.add('visible');
+      } else {
+        bottomNav.classList.remove('visible');
+      }
+    }
+
+    function navToTab(tabName) {
+      document.querySelectorAll('.tab-item-btn').forEach(b => b.classList.remove('active'));
+      if (tabName === 'deck') {
+        document.getElementById('tab-btn-deck').classList.add('active');
+        showScreen('screen-deck');
+        renderCardDeck();
+      } else if (tabName === 'matches') {
+        document.getElementById('tab-btn-matches').classList.add('active');
+        showScreen('screen-matches');
+        renderMatchesScreen();
+      } else if (tabName === 'profile') {
+        document.getElementById('tab-btn-profile').classList.add('active');
+        showScreen('screen-profile');
+        renderProfileScreen();
+      }
+    }
+
+    function initRegisterPassions() {
+      const container = document.getElementById('passions-chips-container');
+      container.innerHTML = AVAILABLE_PASSIONS.map(p => `
+        <div class="passion-chip-item ${selectedRegisterPassions.includes(p) ? 'selected' : ''}" 
+             onclick="toggleRegisterPassion('${p}')">${p}</div>
+      `).join('');
+    }
+
+    function toggleRegisterPassion(passion) {
+      const idx = selectedRegisterPassions.indexOf(passion);
+      if (idx > -1) {
+        if (selectedRegisterPassions.length > 3) {
+          selectedRegisterPassions.splice(idx, 1);
+        } else {
+          alert('Debes mantener al menos 3 pasiones seleccionadas.');
+          return;
+        }
+      } else {
+        if (selectedRegisterPassions.length < 5) {
+          selectedRegisterPassions.push(passion);
+        } else {
+          alert('MÃ¡ximo 5 pasiones permitidas.');
+          return;
+        }
+      }
+      document.getElementById('passions-counter').textContent = `${selectedRegisterPassions.length} / 5 seleccionadas`;
+      initRegisterPassions();
+    }
+
+    function addSamplePhoto(slotIndex) {
+      const pick = SAMPLE_PHOTO_CHOICES[slotIndex % SAMPLE_PHOTO_CHOICES.length];
+      const slot = document.getElementById(`slot-${slotIndex}`);
+      slot.className = 'photo-slot has-image';
+      slot.innerHTML = `<img src="${pick}" alt="Photo"><button type="button" class="slot-remove-btn" onclick="removePhoto(${slotIndex})">âœ•</button>`;
+      registeredPhotos[slotIndex] = pick;
+      updatePhotoCount();
+    }
+
+    function removePhoto(slotIndex) {
+      const slot = document.getElementById(`slot-${slotIndex}`);
+      slot.className = 'photo-slot';
+      slot.innerHTML = `<span style="font-size: 1.3rem;">+</span>`;
+      slot.onclick = () => addSamplePhoto(slotIndex);
+      delete registeredPhotos[slotIndex];
+      updatePhotoCount();
+    }
+
+    function updatePhotoCount() {
+      const count = Object.keys(registeredPhotos).length;
+      document.getElementById('photos-counter').textContent = `${count} / 6 fotos`;
+    }
+
+    function handleCompleteRegister() {
+      const name = document.getElementById('reg-name').value;
+      const lastName = document.getElementById('reg-lastname').value;
+      const city = document.getElementById('reg-city').value;
+      const bio = document.getElementById('reg-bio').value;
+
+      currentUser = {
+        name,
+        lastName,
+        age: 24,
+        city: city + ', Colombia',
+        bio,
+        photo: registeredPhotos[0] || SAMPLE_PHOTO_CHOICES[0],
+        passions: [...selectedRegisterPassions]
+      };
+
+      document.getElementById('match-my-avatar').src = currentUser.photo;
+      document.getElementById('my-profile-pic').src = currentUser.photo;
+
+      alert(`Â¡Cuenta creada con Ã©xito, ${name}! Bienvenido a TinderApp.`);
+      navToTab('deck');
+    }
+
+    function handleCompleteLogin() {
+      const email = document.getElementById('login-email').value;
+      alert(`SesiÃ³n iniciada con Ã©xito (${email}).`);
+      navToTab('deck');
+    }
+
+    function handleLogout() {
+      if (confirm('Â¿Deseas cerrar tu sesiÃ³n?')) {
+        showScreen('screen-welcome');
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const pwd = document.getElementById('login-password');
+      pwd.type = pwd.type === 'password' ? 'text' : 'password';
+    }
+
+    function renderCardDeck() {
+      const mount = document.getElementById('deck-mount-point');
+      mount.innerHTML = '';
+
+      if (currentCandidateIndex >= CANDIDATE_PROFILES.length) {
+        mount.innerHTML = `
+          <div style="text-align: center; padding-top: 140px; color: var(--text-secondary);">
+            <div style="font-size: 3.5rem; margin-bottom: 12px;">ðŸ’«</div>
+            <h3 style="color: #fff; font-size: 1.4rem; margin-bottom: 6px;">No hay mÃ¡s perfiles cerca</h3>
+            <p style="font-size: 0.88rem; max-width: 260px; margin: 0 auto 20px;">Has revisado todos los candidatos cercanos en este momento.</p>
+            <button onclick="resetDeckExplorer()" class="btn-flame-main" style="padding: 10px 24px; font-size: 0.82rem;">Reiniciar Explorador</button>
           </div>
         `;
         return;
       }
 
-      const p = MOCK_PROFILES[currentIndex];
+      const p = CANDIDATE_PROFILES[currentCandidateIndex];
+      const photos = p.photos;
+      const photoSrc = photos[candidateCurrentPhotoIndex] || photos[0];
+
       const card = document.createElement('div');
-      card.className = 'tinder-card';
-      card.style.backgroundImage = `url('${p.photo}')`;
+      card.className = 'tinder-card-modern';
+      card.style.backgroundImage = `url('${photoSrc}')`;
+
+      const storyBars = photos.map((_, i) => `
+        <div class="story-bar-segment ${i === candidateCurrentPhotoIndex ? 'active' : ''}"></div>
+      `).join('');
 
       card.innerHTML = `
-        <div class="card-badge-overlay badge-like">LIKE</div>
-        <div class="card-badge-overlay badge-nope">NOPE</div>
-        <div class="card-gradient-overlay"></div>
-        <div class="card-info-content">
-          <div class="user-name-age">
-            ${p.name}, ${p.age} <span class="verified-badge">✓</span>
+        <div class="card-vignette-overlay"></div>
+        <div class="card-action-badge badge-like-tag">LIKE</div>
+        <div class="card-action-badge badge-nope-tag">NOPE</div>
+
+        <div class="story-progress-bars">${storyBars}</div>
+        
+        <div class="photo-tap-left" onclick="changeCandidatePhoto(-1, event)"></div>
+        <div class="photo-tap-right" onclick="changeCandidatePhoto(1, event)"></div>
+
+        <div class="card-footer-info">
+          <div class="candidate-name-age-row">
+            ${p.name}, ${p.age} <span class="verified-icon-blue">âœ“</span>
           </div>
-          <div class="user-city">📍 ${p.city}</div>
-          <div class="user-bio">${p.bio}</div>
-          <div class="passions-row">
-            ${p.passions.map(pass => `<span class="passion-pill">${pass}</span>`).join('')}
+          <div class="candidate-city-tag">ðŸ“ ${p.city}</div>
+          <div class="candidate-bio-text">${p.bio}</div>
+          <div class="candidate-passions-row">
+            ${p.passions.map(pass => `<span class="card-passion-pill">${pass}</span>`).join('')}
           </div>
+          <button class="btn-open-detail-info" onclick="openDetailModal(${currentCandidateIndex}, event)" title="Ver detalle">i</button>
         </div>
       `;
 
-      attachSwipeGestures(card);
-      deckContainer.appendChild(card);
+      attachDualGestures(card);
+      mount.appendChild(card);
     }
 
-    function attachSwipeGestures(card) {
+    function changeCandidatePhoto(step, event) {
+      if (event) event.stopPropagation();
+      const p = CANDIDATE_PROFILES[currentCandidateIndex];
+      if (!p) return;
+      candidateCurrentPhotoIndex += step;
+      if (candidateCurrentPhotoIndex < 0) candidateCurrentPhotoIndex = 0;
+      if (candidateCurrentPhotoIndex >= p.photos.length) candidateCurrentPhotoIndex = p.photos.length - 1;
+      renderCardDeck();
+    }
+
+    function attachDualGestures(card) {
       let isDragging = false;
       let startX = 0;
       let currentX = 0;
 
-      const badgeLike = card.querySelector('.badge-like');
-      const badgeNope = card.querySelector('.badge-nope');
+      const badgeLike = card.querySelector('.badge-like-tag');
+      const badgeNope = card.querySelector('.badge-nope-tag');
 
-      function start(clientX) {
+      function onStart(clientX) {
         isDragging = true;
         startX = clientX;
       }
 
-      function move(clientX) {
+      function onMove(clientX) {
         if (!isDragging) return;
         currentX = clientX;
         const deltaX = currentX - startX;
-        const rot = deltaX * 0.06;
+        const rot = deltaX * 0.055;
 
         card.style.transform = `translateX(${deltaX}px) rotate(${rot}deg)`;
 
-        if (deltaX > 40) {
-          const opacity = Math.min(1, (deltaX - 40) / 100);
-          badgeLike.style.opacity = opacity;
+        if (deltaX > 30) {
+          badgeLike.style.opacity = Math.min(1, (deltaX - 30) / 90);
           badgeNope.style.opacity = 0;
-        } else if (deltaX < -40) {
-          const opacity = Math.min(1, Math.abs(deltaX + 40) / 100);
-          badgeNope.style.opacity = opacity;
+        } else if (deltaX < -30) {
+          badgeNope.style.opacity = Math.min(1, Math.abs(deltaX + 30) / 90);
           badgeLike.style.opacity = 0;
         } else {
           badgeLike.style.opacity = 0;
@@ -847,15 +1709,15 @@
         }
       }
 
-      function end() {
+      function onEnd() {
         if (!isDragging) return;
         isDragging = false;
         const deltaX = currentX - startX;
 
         if (deltaX > 110) {
-          swipe('right');
+          triggerSwipe('right');
         } else if (deltaX < -110) {
-          swipe('left');
+          triggerSwipe('left');
         } else {
           card.style.transition = 'transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
           card.style.transform = 'translateX(0) rotate(0)';
@@ -865,192 +1727,201 @@
         }
       }
 
-      // Mouse events
-      card.addEventListener('mousedown', e => start(e.clientX));
-      window.addEventListener('mousemove', e => move(e.clientX));
-      window.addEventListener('mouseup', end);
+      card.addEventListener('mousedown', e => onStart(e.clientX));
+      window.addEventListener('mousemove', e => onMove(e.clientX));
+      window.addEventListener('mouseup', onEnd);
 
-      // Touch events
-      card.addEventListener('touchstart', e => start(e.touches[0].clientX));
-      card.addEventListener('touchmove', e => move(e.touches[0].clientX));
-      card.addEventListener('touchend', end);
+      card.addEventListener('touchstart', e => onStart(e.touches[0].clientX));
+      card.addEventListener('touchmove', e => onMove(e.touches[0].clientX));
+      card.addEventListener('touchend', onEnd);
     }
 
-    function swipe(dir) {
-      const card = deckContainer.querySelector('.tinder-card');
+    function triggerSwipe(direction) {
+      const card = document.querySelector('.tinder-card-modern');
       if (!card) return;
 
-      const flyX = dir === 'right' ? 800 : -800;
-      card.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
-      card.style.transform = `translateX(${flyX}px) rotate(${flyX * 0.05}deg)`;
+      const flyDistance = direction === 'right' ? 850 : -850;
+      card.style.transition = 'transform 0.35s ease, opacity 0.35s ease';
+      card.style.transform = `translateX(${flyDistance}px) rotate(${flyDistance * 0.04}deg)`;
       card.style.opacity = '0';
 
-      const candidate = MOCK_PROFILES[currentIndex];
+      const candidate = CANDIDATE_PROFILES[currentCandidateIndex];
 
       setTimeout(() => {
-        currentIndex++;
-        renderCard();
+        currentCandidateIndex++;
+        candidateCurrentPhotoIndex = 0;
+        renderCardDeck();
 
-        if (dir === 'right') {
-          triggerMatch(candidate);
+        if (direction === 'right') {
+          launchMatchModal(candidate);
         }
-      }, 350);
+      }, 300);
     }
 
-    function triggerMatch(profile) {
+    function resetDeckExplorer() {
+      currentCandidateIndex = 0;
+      candidateCurrentPhotoIndex = 0;
+      renderCardDeck();
+    }
+
+    function launchMatchModal(candidate) {
       matchesList.unshift({
-        profile: profile,
-        lastMsg: '¡Nuevo Match! Saluda a ' + profile.name
+        profile: candidate,
+        lastMsg: 'Â¡Nuevo Match! Saluda a ' + candidate.name
       });
-      chatHistories[profile.uid] = [
-        { from: 'theirs', text: `¡Hola! Me encantó tu perfil ✨ ¿Qué tal tu día?` }
+
+      chatHistories[candidate.uid] = [
+        { from: 'theirs', text: `Â¡Hola ${currentUser.name}! Me encantÃ³ tu perfil âœ¨ Â¿QuÃ© planes para hoy?` }
       ];
 
-      document.getElementById('match-modal-target-photo').src = profile.photo;
-      document.getElementById('match-modal-subtext').textContent = `Tú y ${profile.name} se han gustado mutuamente.`;
-      matchModal.classList.add('active');
+      document.getElementById('match-target-avatar').src = candidate.photos[0];
+      document.getElementById('match-modal-text').textContent = `TÃº y ${candidate.name} se han gustado mutuamente.`;
+      
+      const modal = document.getElementById('modal-match-overlay');
+      modal.classList.add('active');
 
-      activeChatUser = profile;
+      activeChatUser = candidate;
       renderMatchesScreen();
     }
 
-    function resetDeck() {
-      currentIndex = 0;
-      renderCard();
-    }
-
-    // Modal Events
-    document.getElementById('btn-match-keep-swiping').onclick = () => {
-      matchModal.classList.remove('active');
+    document.getElementById('btn-match-continue').onclick = () => {
+      document.getElementById('modal-match-overlay').classList.remove('active');
     };
 
-    document.getElementById('btn-match-open-chat').onclick = () => {
-      matchModal.classList.remove('active');
+    document.getElementById('btn-match-to-chat').onclick = () => {
+      document.getElementById('modal-match-overlay').classList.remove('active');
       openChatWith(activeChatUser);
     };
 
-    // Floating Button Controls
-    document.getElementById('btn-like').onclick = () => swipe('right');
-    document.getElementById('btn-pass').onclick = () => swipe('left');
-    document.getElementById('btn-superlike').onclick = () => swipe('right');
-    document.getElementById('btn-rewind').onclick = () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        renderCard();
-      }
-    };
+    function openDetailModal(candidateIdx, event) {
+      if (event) event.stopPropagation();
+      const p = CANDIDATE_PROFILES[candidateIdx];
+      document.getElementById('modal-detail-name').textContent = `${p.name}, ${p.age}`;
+      document.getElementById('modal-detail-photo').src = p.photos[0];
+      document.getElementById('modal-detail-city').textContent = `ðŸ“ ${p.city}`;
+      document.getElementById('modal-detail-bio').textContent = p.bio;
+      document.getElementById('modal-detail-passions').innerHTML = p.passions.map(pass => `
+        <span class="card-passion-pill">${pass}</span>
+      `).join('');
+      document.getElementById('modal-detail-overlay').classList.add('active');
+    }
 
-    // Navigation
-    const navDeck = document.getElementById('nav-btn-deck');
-    const navMatches = document.getElementById('nav-btn-matches');
-
-    navDeck.onclick = () => {
-      navDeck.classList.add('active');
-      navMatches.classList.remove('active');
-      viewDeck.classList.add('active');
-      viewMatches.classList.remove('active');
-      viewChat.classList.remove('active');
-    };
-
-    navMatches.onclick = () => {
-      navMatches.classList.add('active');
-      navDeck.classList.remove('active');
-      viewMatches.classList.add('active');
-      viewDeck.classList.remove('active');
-      viewChat.classList.remove('active');
-      renderMatchesScreen();
-    };
+    function closeDetailModal() {
+      document.getElementById('modal-detail-overlay').classList.remove('active');
+    }
 
     function renderMatchesScreen() {
-      const newMatchesBar = document.getElementById('new-matches-bar');
-      const convList = document.getElementById('conversations-list-container');
+      const bubbles = document.getElementById('matches-bubbles-row');
+      const threads = document.getElementById('conversations-thread-list');
 
-      newMatchesBar.innerHTML = matchesList.map(m => `
-        <div class="new-match-avatar" onclick="openChatWithByUid('${m.profile.uid}')">
-          <div class="avatar-ring">
-            <img src="${m.profile.photo}" alt="${m.profile.name}">
+      bubbles.innerHTML = matchesList.map(m => `
+        <div class="new-match-bubble" onclick="openChatByUid('${m.profile.uid}')">
+          <div class="match-gradient-ring">
+            <img src="${m.profile.photos[0]}" alt="${m.profile.name}">
           </div>
-          <span class="match-name-tag">${m.profile.name}</span>
+          <span class="new-match-name">${m.profile.name}</span>
         </div>
       `).join('');
 
-      convList.innerHTML = matchesList.map(m => `
-        <div class="conv-item" onclick="openChatWithByUid('${m.profile.uid}')">
-          <img src="${m.profile.photo}" alt="${m.profile.name}" class="conv-avatar">
-          <div class="conv-info">
-            <div class="conv-name">${m.profile.name}</div>
-            <div class="conv-snippet">${m.lastMsg}</div>
+      threads.innerHTML = matchesList.map(m => `
+        <div class="thread-row-item" onclick="openChatByUid('${m.profile.uid}')">
+          <img src="${m.profile.photos[0]}" alt="${m.profile.name}" class="thread-avatar">
+          <div class="thread-meta">
+            <div class="thread-name">${m.profile.name}</div>
+            <div class="thread-preview">${m.lastMsg}</div>
           </div>
-          <span style="font-size: 0.75rem; color: var(--text-muted);">Ahora</span>
+          <small style="color: #64748b; font-size: 0.72rem;">Ahora</small>
         </div>
       `).join('');
     }
 
-    function openChatWithByUid(uid) {
-      const found = matchesList.find(m => m.profile.uid === uid);
-      if (found) openChatWith(found.profile);
+    function openChatByUid(uid) {
+      const match = matchesList.find(m => m.profile.uid === uid);
+      if (match) openChatWith(match.profile);
     }
 
     function openChatWith(profile) {
       activeChatUser = profile;
-      document.getElementById('chat-header-name').textContent = profile.name;
-      document.getElementById('chat-header-avatar').src = profile.photo;
+      document.getElementById('chat-peer-avatar').src = profile.photos[0];
+      document.getElementById('chat-peer-name').textContent = profile.name;
 
-      viewDeck.classList.remove('active');
-      viewMatches.classList.remove('active');
-      viewChat.classList.add('active');
-
-      renderChatMessages();
+      showScreen('screen-chat');
+      renderChatStream();
     }
 
-    function renderChatMessages() {
-      const container = document.getElementById('chat-messages-container');
+    function renderChatStream() {
+      const stream = document.getElementById('chat-stream');
       const msgs = chatHistories[activeChatUser.uid] || [];
-      container.innerHTML = msgs.map(m => `
-        <div class="msg-bubble ${m.from === 'mine' ? 'msg-mine' : 'msg-theirs'}">
+      stream.innerHTML = msgs.map(m => `
+        <div class="chat-bubble ${m.from === 'mine' ? 'bubble-mine' : 'bubble-theirs'}">
           ${m.text}
         </div>
       `).join('');
-      container.scrollTop = container.scrollHeight;
+      stream.scrollTop = stream.scrollHeight;
     }
 
-    document.getElementById('btn-chat-back').onclick = () => {
-      viewChat.classList.remove('active');
-      viewMatches.classList.add('active');
-    };
-
-    // Chat Send Logic
-    function handleSend() {
-      const input = document.getElementById('chat-msg-input');
+    function sendChatMessage() {
+      const input = document.getElementById('chat-type-input');
       const text = input.value.trim();
       if (!text || !activeChatUser) return;
 
       if (!chatHistories[activeChatUser.uid]) chatHistories[activeChatUser.uid] = [];
-      chatHistories[activeChatUser.uid].push({ from: 'mine', text: text });
+      chatHistories[activeChatUser.uid].push({ from: 'mine', text });
       input.value = '';
-      renderChatMessages();
+      renderChatStream();
 
-      // Simulated auto-reply after 1.2s
       setTimeout(() => {
-        const replies = [
-          '¡Jajaja qué bien! Me caes súper bien 😊',
-          '¡Totalmente de acuerdo! Qué gran plan 👌',
-          'Deberíamos ir por un café o algo pronto ☕',
-          '¡Qué interesante! Cuéntame más sobre eso ✨'
+        const answers = [
+          'Â¡Jajaja quÃ© genial! Me caes muy bien ðŸ˜Š',
+          'Â¡Totalmente de acuerdo! QuÃ© gran plan ðŸ‘Œ',
+          'Â¿Vamos por un cafÃ© o algo pronto? â˜•',
+          'Â¡QuÃ© interesante! CuÃ©ntame mÃ¡s âœ¨'
         ];
-        const randomReply = replies[Math.floor(Math.random() * replies.length)];
-        chatHistories[activeChatUser.uid].push({ from: 'theirs', text: randomReply });
-        renderChatMessages();
-      }, 1200);
+        const reply = answers[Math.floor(Math.random() * answers.length)];
+        chatHistories[activeChatUser.uid].push({ from: 'theirs', text: reply });
+        renderChatStream();
+      }, 1000);
     }
 
-    document.getElementById('btn-send-msg').onclick = handleSend;
-    document.getElementById('chat-msg-input').onkeydown = e => {
-      if (e.key === 'Enter') handleSend();
+    document.getElementById('btn-chat-send').onclick = sendChatMessage;
+    document.getElementById('chat-type-input').onkeydown = e => {
+      if (e.key === 'Enter') sendChatMessage();
     };
 
-    // Inicializar
-    renderCard();
+    function renderProfileScreen() {
+      document.getElementById('my-profile-pic').src = currentUser.photo;
+      document.getElementById('my-profile-name').textContent = `${currentUser.name} ${currentUser.lastName}, ${currentUser.age}`;
+      document.getElementById('my-profile-location').textContent = `ðŸ“ ${currentUser.city}`;
+      document.getElementById('my-profile-bio').textContent = currentUser.bio;
+      document.getElementById('my-profile-passions').innerHTML = currentUser.passions.map(p => `
+        <span class="card-passion-pill">${p}</span>
+      `).join('');
+    }
+
+    document.getElementById('btn-act-like').onclick = () => triggerSwipe('right');
+    document.getElementById('btn-act-pass').onclick = () => triggerSwipe('left');
+    document.getElementById('btn-act-superlike').onclick = () => triggerSwipe('right');
+    document.getElementById('btn-act-rewind').onclick = () => {
+      if (currentCandidateIndex > 0) {
+        currentCandidateIndex--;
+        candidateCurrentPhotoIndex = 0;
+        renderCardDeck();
+      }
+    };
+    document.getElementById('btn-act-boost').onclick = () => {
+      alert('âš¡ Â¡Boost activado! Tu perfil serÃ¡ el mÃ¡s destacado durante los prÃ³ximos 30 minutos.');
+    };
+
+    document.getElementById('btn-welcome-register').onclick = () => showScreen('screen-register');
+    document.getElementById('btn-welcome-login').onclick = () => showScreen('screen-login');
+    document.getElementById('btn-welcome-quick-demo').onclick = () => navToTab('deck');
+    document.getElementById('btn-reg-back').onclick = () => showScreen('screen-welcome');
+    document.getElementById('btn-login-back').onclick = () => showScreen('screen-welcome');
+    document.getElementById('link-goto-login').onclick = (e) => { e.preventDefault(); showScreen('screen-login'); };
+    document.getElementById('link-goto-register').onclick = (e) => { e.preventDefault(); showScreen('screen-register'); };
+
+    initRegisterPassions();
+    updatePhotoCount();
   </script>
 </body>
 </html>

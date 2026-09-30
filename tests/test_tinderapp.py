@@ -1,4 +1,4 @@
-"""
+﻿"""
 TINDERAPP MOBILE - Test Suite Automatizada de Aceptación, Arquitectura y QA
 Gobernanza: Google Cloud OKF v0.2
 Estandar: ISO 25010 & Mandato de Verificación Empírica
@@ -211,5 +211,20 @@ class TestSimulatorRunnerAndEndpoints(unittest.TestCase):
         self.assertIn("MOCK_PROFILES", html)
 
 
+    def test_all_simulator_screens_and_auth_flow(self):
+        with open(os.path.join(BASE_DIR, "demo.html"), "r", encoding="utf-8") as f:
+            html = f.read()
+        self.assertIn("screen-welcome", html)
+        self.assertIn("screen-register", html)
+        self.assertIn("screen-login", html)
+        self.assertIn("screen-deck", html)
+        self.assertIn("screen-matches", html)
+        self.assertIn("screen-chat", html)
+        self.assertIn("screen-profile", html)
+        self.assertIn("passions-chips-grid", html)
+        self.assertIn("story-progress-bars", html)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
