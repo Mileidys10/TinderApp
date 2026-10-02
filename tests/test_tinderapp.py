@@ -1,6 +1,6 @@
 ﻿"""
 TINDERAPP MOBILE - Test Suite Automatizada de Aceptación, Arquitectura y QA
-Gobernanza: Google Cloud OKF v0.2
+Suite de Pruebas Automatizadas
 Estandar: ISO 25010 & Mandato de Verificación Empírica
 """
 
@@ -22,7 +22,7 @@ CAPACITOR_CONFIG = os.path.join(BASE_DIR, "capacitor.config.ts")
 
 
 class TestPackageAndGovernance(unittest.TestCase):
-    """Verifica la configuración del proyecto, manifiestos y gobernanza OKF v0.2."""
+    """Verifica la configuración del proyecto, manifiestos y protección de entornos y manifiestos."""
 
     def test_package_json_metadata(self):
         self.assertTrue(os.path.isfile(PACKAGE_JSON))

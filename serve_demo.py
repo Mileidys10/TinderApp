@@ -1,7 +1,7 @@
 """
 TINDERAPP MOBILE - Servidor HTTP Local para Demostración y Simulador Web
 Puerto por defecto: 3002
-Gobernanza: Google Cloud OKF v0.2
+Arquitectura: Servidor Local de Demostracion
 """
 
 import http.server
