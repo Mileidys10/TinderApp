@@ -1,0 +1,15 @@
+﻿services:
+  tinderapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tinderapp_mobile
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    networks:
+      - tinderapp-net
+
+networks:
+  tinderapp-net:
+    driver: bridge
